@@ -1,31 +1,29 @@
+import 'package:expenses_copilot_app/app.dart';
+import 'package:expenses_copilot_app/config/environment.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: Environment.supabaseUrl,
+    anonKey: Environment.supabaseApiKey,
+  );
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final supabaseInstance = Supabase.instance;
 
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Expenses Copilot',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
-    );
-  }
-}
+  final AuthenticationRepository authRepository =
+      SupabaseAuthenticationRepository(client: supabaseInstance.client);
+  await authRepository.user.first;
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
+  runApp(ExpensesCopilotApp(
+    authRepository: authRepository,
+  ));
 }
