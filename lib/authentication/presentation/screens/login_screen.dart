@@ -1,16 +1,17 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
-import 'package:expenses_copilot_app/login/presentation/providers/login_cubit/login_cubit.dart';
-import 'package:expenses_copilot_app/login/presentation/widgets/email_form_field.dart';
-import 'package:expenses_copilot_app/login/presentation/widgets/password_form_field.dart';
-import 'package:expenses_copilot_app/login/presentation/widgets/signin_submit_button.dart';
+import 'package:expenses_copilot_app/authentication/presentation/providers/login_cubit/login_cubit.dart';
+import 'package:expenses_copilot_app/authentication/presentation/widgets/email_form_field.dart';
+import 'package:expenses_copilot_app/authentication/presentation/widgets/password_form_field.dart';
+import 'package:expenses_copilot_app/authentication/presentation/widgets/signin_submit_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 
 class LoginScreen extends StatelessWidget {
+  static const String routeName = '/login';
   const LoginScreen({super.key});
 
   @override
@@ -20,12 +21,21 @@ class LoginScreen extends StatelessWidget {
         repository: RepositoryProvider.of<AuthenticationRepository>(context),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Inicio de sesión'),
-        ),
-        body: const SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 10),
-          child: SignInForm(),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 100),
+              Text(
+                'Inicio de sesión',
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              const SizedBox(height: 20),
+              const SignInForm(),
+            ],
+          ),
         ),
         bottomNavigationBar: const CustomBottomAppBar(
           child: SingInSubmitButton(),
@@ -67,7 +77,6 @@ class _SignInFormState extends State<SignInForm> {
   Widget build(BuildContext context) {
     return AutofillGroup(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           BlocSelector<LoginCubit, LoginState, Email>(
             selector: (state) {

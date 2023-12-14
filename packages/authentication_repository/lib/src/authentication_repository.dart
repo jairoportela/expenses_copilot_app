@@ -14,7 +14,7 @@ abstract class AuthenticationRepository {
     required String password,
   });
 
-  void signOut();
+  Future<void> signOut();
 }
 
 /// {@template authentication_repository}
@@ -77,7 +77,7 @@ class SupabaseAuthenticationRepository extends AuthenticationRepository {
   }
 
   @override
-  void signOut() async {
+  Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();
     } catch (_) {}

@@ -1,4 +1,4 @@
-import 'package:expenses_copilot_app/login/presentation/providers/login_cubit/login_cubit.dart';
+import 'package:expenses_copilot_app/authentication/presentation/providers/login_cubit/login_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
