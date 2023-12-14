@@ -1,10 +1,17 @@
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
-class SignUpWithEmailAndPasswordFailure implements Exception {
+class AuthError implements Exception {
+  const AuthError({required this.message});
+
+  /// The associated error message.
+  final String message;
+}
+
+class SignUpWithEmailAndPasswordFailure extends AuthError {
   /// {@macro sign_up_with_email_and_password_failure}
   const SignUpWithEmailAndPasswordFailure([
-    this.message = 'An unknown exception occurred.',
-  ]);
+    String message = 'Un error ha ocurrido.',
+  ]) : super(message: message);
 
   /// Create an authentication message
   /// from a firebase authentication exception code.
@@ -12,33 +19,27 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
   factory SignUpWithEmailAndPasswordFailure.fromException(
       supabase.AuthException error) {
     return const SignUpWithEmailAndPasswordFailure(
-      'Email is not valid or badly formatted.',
+      'El correo no es válido.',
     );
   }
-
-  /// The associated error message.
-  final String message;
 }
 
 /// {@template log_in_with_email_and_password_failure}
 /// Thrown during the login process if a failure occurs.
 /// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
 /// {@endtemplate}
-class LogInWithEmailAndPasswordFailure implements Exception {
+class LogInWithEmailAndPasswordFailure extends AuthError {
   /// {@macro log_in_with_email_and_password_failure}
   const LogInWithEmailAndPasswordFailure([
-    this.message = 'An unknown exception occurred.',
-  ]);
+    String message = 'Un error ha ocurrido.',
+  ]) : super(message: message);
 
   /// Create an authentication message
   /// from a firebase authentication exception code.
   factory LogInWithEmailAndPasswordFailure.fromException(
       supabase.AuthException error) {
     return const LogInWithEmailAndPasswordFailure(
-      'Email is not valid or badly formatted.',
+      'El correo no es válido.',
     );
   }
-
-  /// The associated error message.
-  final String message;
 }

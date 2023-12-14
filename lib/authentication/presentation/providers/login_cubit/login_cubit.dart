@@ -1,7 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:expenses_copilot_app/utils/errors/form_error_extension.dart';
 import 'package:form_inputs/form_inputs.dart';
 
 part 'login_state.dart';
@@ -84,8 +83,10 @@ class LoginCubit extends Cubit<LoginState> {
         password: state.password.value,
       );
       emit(state.copyWith(status: const FormSubmitSuccess()));
+    } on AuthError catch (error) {
+      emit(state.copyWith(status: FormSubmitError(error.message)));
     } catch (error) {
-      emit(state.copyWith(status: FormSubmitError(error.toMessage())));
+      emit(state.copyWith(status: FormSubmitError(error.toString())));
     }
   }
 
