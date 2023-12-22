@@ -1,4 +1,5 @@
 import 'package:expenses_copilot_app/authentication/presentation/providers/app_bloc/app_bloc.dart';
+import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,6 +38,11 @@ class ExpensesHomeScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [Text('Gastos')],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            Navigator.of(context).pushNamed(CreateExpenseScreen.routeName),
+        child: const Icon(Icons.add),
       ),
     );
   }
