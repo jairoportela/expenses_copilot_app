@@ -32,7 +32,6 @@ class ExpensesRepositoryImplementation extends ExpensesRepository {
           const SubscribeHelper(tableName: _tableName, primaryKey: 'id'),
     )
         .asyncMap((event) async {
-      print(event);
       final data = await _dataSource.getAll(
           queryHelper: const QueryHelper(
               tableName: _tableName,

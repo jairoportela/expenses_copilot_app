@@ -6,6 +6,7 @@ import 'package:expenses_copilot_app/expenses/data/repository/expenses_repositor
 import 'package:expenses_copilot_app/expenses/presentation/screens/widgets/create_expense_submit_button.dart';
 import 'package:expenses_copilot_app/expenses/providers/create_expense/create_expense_cubit.dart';
 import 'package:expenses_copilot_app/payment_methods/presentation/widgets/payment_methods_dropdown.dart';
+import 'package:expenses_copilot_app/utils/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
@@ -156,8 +157,12 @@ class _CrateExpenseDateInputState extends State<CrateExpenseDateInput> {
   @override
   void initState() {
     _controller.text =
-        context.read<CreateExpenseCubit>().state.date.toIso8601String();
+        getDateText(context.read<CreateExpenseCubit>().state.date);
     super.initState();
+  }
+
+  String getDateText(DateTime date) {
+    return date.yMMMd();
   }
 
   @override
@@ -165,7 +170,7 @@ class _CrateExpenseDateInputState extends State<CrateExpenseDateInput> {
     return BlocListener<CreateExpenseCubit, CreateExpenseState>(
         listenWhen: (previous, current) => previous.date != current.date,
         listener: (context, state) {
-          _controller.text = state.date.toIso8601String();
+          _controller.text = getDateText(state.date);
         },
         child: TextFormField(
           controller: _controller,
