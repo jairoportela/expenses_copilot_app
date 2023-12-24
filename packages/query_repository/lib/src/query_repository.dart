@@ -9,17 +9,17 @@ abstract class QueryRepository {
 
   final supabase.SupabaseClient _client;
 
-  Future<List<R>> getAll<R>({required QueryHelper queryHelper});
+  Future<List<R>> getAll<R>({required QueryHelper<R> queryHelper});
 }
 
 class SupabaseQueryRepository extends QueryRepository {
   @override
-  Future<List<R>> getAll<R>({required QueryHelper queryHelper}) async {
+  Future<List<R>> getAll<R>({required QueryHelper<R> queryHelper}) async {
     try {
       final data = await _getQuery(queryHelper);
 
       if (data == null) throw const QueryError(message: '');
-      final result = data.map((e) => queryHelper.fromJson<R>(e)).toList();
+      final result = data.map((e) => queryHelper.fromJson(e)).toList();
       return result;
     } on QueryError {
       rethrow;

@@ -1,5 +1,7 @@
+import 'package:expenses_copilot_app/categories/presentation/widgets/expenses_categories_dropdown.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
+import 'package:expenses_copilot_app/payment_methods/presentation/widgets/payment_methods_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -57,58 +59,12 @@ class CreateExpenseForm extends StatelessWidget {
             const Gap(10),
             CustomInputField(
               title: 'Categoría *',
-              child: DropdownButtonFormField(
-                borderRadius: BorderRadius.circular(20),
-                icon: const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.black,
-                ),
-                items: [
-                  const DropdownMenuItem(
-                    child: Row(children: [
-                      Icon(Icons.pool),
-                      Gap(10),
-                      Text('Natación')
-                    ]),
-                    value: 'a',
-                  ),
-                  const DropdownMenuItem(
-                    child: Text('Compras'),
-                    value: 'b',
-                  ),
-                  const DropdownMenuItem(
-                    child: Text('Baile'),
-                    value: 'c',
-                  )
-                ],
-                onChanged: (value) {},
-              ),
+              child: ExpensesCategoriesDropdownBuilder(),
             ),
             const Gap(10),
             CustomInputField(
-              title: 'Método de pago',
-              child: DropdownButtonFormField(
-                borderRadius: BorderRadius.circular(20),
-                icon: const Icon(
-                  Icons.arrow_forward_ios_rounded,
-                  color: Colors.black,
-                ),
-                items: [
-                  const DropdownMenuItem(
-                    child: Text('Rappi'),
-                    value: 'rappi',
-                  ),
-                  const DropdownMenuItem(
-                    child: Text('Bancolombia'),
-                    value: 'bancolombia',
-                  ),
-                  const DropdownMenuItem(
-                    child: Text('Nubank'),
-                    value: 'nubank',
-                  )
-                ],
-                onChanged: (value) {},
-              ),
+              title: 'Método de pago *',
+              child: PaymentMethodsDropdownBuilder(),
             ),
             const Gap(10),
             CustomInputField(
