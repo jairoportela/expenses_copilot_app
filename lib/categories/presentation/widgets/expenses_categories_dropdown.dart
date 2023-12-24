@@ -74,7 +74,7 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
             for (var category in data)
               DropdownMenuItem(
                 value: category.id,
-                child: Text(category.name),
+                child: FittedBox(child: Text(category.name)),
               ),
           ],
         );

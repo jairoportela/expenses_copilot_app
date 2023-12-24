@@ -2,6 +2,7 @@ import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.
 import 'package:expenses_copilot_app/categories/presentation/widgets/expenses_categories_dropdown.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
+import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/widgets/create_expense_submit_button.dart';
 import 'package:expenses_copilot_app/expenses/providers/create_expense/create_expense_cubit.dart';
 import 'package:expenses_copilot_app/payment_methods/presentation/widgets/payment_methods_dropdown.dart';
@@ -19,7 +20,9 @@ class CreateExpenseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CreateExpenseCubit(
-        repository: RepositoryProvider.of<QueryRepository>(context),
+        repository: ExpensesRepositoryImplementation(
+          dataSource: RepositoryProvider.of<QueryRepository>(context),
+        ),
         userId: context.read<AppBloc>().state.user.id,
       ),
       child: Scaffold(

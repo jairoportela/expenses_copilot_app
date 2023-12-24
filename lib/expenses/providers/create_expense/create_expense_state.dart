@@ -46,7 +46,7 @@ class CreateExpenseState extends Equatable {
 
   Map<String, dynamic> toJson() => {
         'name': name.value,
-        'value': double.tryParse(name.value) ?? 0,
+        'value': double.tryParse(value.value) ?? 0,
         'category_id': categoryId.value,
         'payment_id': paymentMethodId.value,
         'date': date.toUtc().toIso8601String(),

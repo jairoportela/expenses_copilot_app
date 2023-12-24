@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
 
 import 'package:form_inputs/form_inputs.dart';
 import 'package:query_repository/query_repository.dart';
@@ -8,11 +9,11 @@ part 'create_expense_state.dart';
 
 class CreateExpenseCubit extends Cubit<CreateExpenseState> {
   CreateExpenseCubit(
-      {required QueryRepository repository, required String userId})
+      {required ExpensesRepository repository, required String userId})
       : _repository = repository,
         _userId = userId,
         super(CreateExpenseState.empty);
-  final QueryRepository _repository;
+  final ExpensesRepository _repository;
   final String _userId;
 
   void onChangeCategory(String? value) => emit(state.copyWith(
@@ -71,11 +72,7 @@ class CreateExpenseCubit extends Cubit<CreateExpenseState> {
       if (finalState.isNotValid) return;
 
       emit(state.copyWith(status: const FormSubmitLoading()));
-      await _repository.create(
-        createHelper: CreateHelper(
-            tableName: 'expenses',
-            data: {...state.toJson(), 'user_id': _userId}),
-      );
+      await _repository.create(data: state.toJson(), userId: _userId);
       emit(state.copyWith(status: const FormSubmitSuccess()));
     } on CreateError catch (error) {
       emit(state.copyWith(status: FormSubmitError(error.message)));

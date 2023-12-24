@@ -74,7 +74,7 @@ class PaymentMethodsDropdown extends StatelessWidget {
             for (var paymentMethod in data)
               DropdownMenuItem(
                 value: paymentMethod.id,
-                child: Flexible(
+                child: FittedBox(
                     child: Text(
                   paymentMethod.name,
                   maxLines: 2,

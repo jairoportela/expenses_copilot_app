@@ -1,6 +1,7 @@
 import 'package:query_repository/src/models/create_helper.dart';
 import 'package:query_repository/src/models/exceptions.dart';
 import 'package:query_repository/src/models/query_helper.dart';
+import 'package:query_repository/src/models/subscribe_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 abstract class QueryRepository {
@@ -8,6 +9,8 @@ abstract class QueryRepository {
   Future<bool> create({required CreateHelper createHelper});
   Future<R> createWithValue<R>(
       {required CreateHelperWithValue<R> createHelper});
+  supabase.SupabaseStreamFilterBuilder subscribe(
+      {required SubscribeHelper subscribeHelper});
 }
 
 class SupabaseQueryRepository extends QueryRepository {
@@ -72,5 +75,13 @@ class SupabaseQueryRepository extends QueryRepository {
     } catch (error) {
       throw const CreateError(message: 'Un error ha ocurrido');
     }
+  }
+
+  @override
+  supabase.SupabaseStreamFilterBuilder subscribe(
+      {required SubscribeHelper subscribeHelper}) {
+    return _client
+        .from(subscribeHelper.tableName)
+        .stream(primaryKey: [subscribeHelper.primaryKey]);
   }
 }
