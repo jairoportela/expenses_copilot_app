@@ -6,7 +6,8 @@ import 'package:gap/gap.dart';
 import 'package:query_repository/query_repository.dart';
 
 class PaymentMethodsDropdownBuilder extends StatelessWidget {
-  const PaymentMethodsDropdownBuilder({super.key});
+  const PaymentMethodsDropdownBuilder({super.key, required this.onChanged});
+  final void Function(String? value)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +15,16 @@ class PaymentMethodsDropdownBuilder extends StatelessWidget {
       create: (_) => PaymentMethodsOverviewCubit(
         repository: SupabaseQueryRepository(),
       )..getData(),
-      child: const PaymentMethodsDropdown(),
+      child: PaymentMethodsDropdown(
+        onChanged: onChanged,
+      ),
     );
   }
 }
 
 class PaymentMethodsDropdown extends StatelessWidget {
-  const PaymentMethodsDropdown({super.key});
-
+  const PaymentMethodsDropdown({super.key, required this.onChanged});
+  final void Function(String? value)? onChanged;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PaymentMethodsOverviewCubit,
@@ -34,7 +37,8 @@ class PaymentMethodsDropdown extends StatelessWidget {
         return DropdownButtonFormField(
           selectedItemBuilder: (context) {
             return data.map((PaymentMethod item) {
-              return ConstrainedBox(
+              return Container(
+                alignment: Alignment.centerLeft,
                 constraints: BoxConstraints(
                     minWidth: 100,
                     maxWidth: MediaQuery.sizeOf(context).width * 0.7),
@@ -42,6 +46,7 @@ class PaymentMethodsDropdown extends StatelessWidget {
                   child: Text(
                     item.name,
                     maxLines: 2,
+                    textAlign: TextAlign.start,
                   ),
                 ),
               );
@@ -63,7 +68,7 @@ class PaymentMethodsDropdown extends StatelessWidget {
                 )),
               ),
           ],
-          onChanged: (value) {},
+          onChanged: onChanged,
         );
       },
     );

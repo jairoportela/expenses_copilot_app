@@ -12,11 +12,9 @@ enum TextInputError {
 
 // Extend FormzInput and provide the input type and error type.
 class TextInputValue extends FormzInput<String, TextInputError> {
-  // Call super.pure to represent an unmodified form input.
-  const TextInputValue.pure([String value = '']) : super.pure(value);
+  const TextInputValue.unvalidated([String value = '']) : super.pure(value);
 
-  // Call super.dirty to represent a modified form input.
-  const TextInputValue.dirty([String value = '']) : super.dirty(value);
+  const TextInputValue.validated([String value = '']) : super.dirty(value);
 
   // Override validator to handle validating a given input value.
   @override

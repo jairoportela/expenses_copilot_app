@@ -6,22 +6,30 @@ import 'package:gap/gap.dart';
 import 'package:query_repository/query_repository.dart';
 
 class ExpensesCategoriesDropdownBuilder extends StatelessWidget {
-  const ExpensesCategoriesDropdownBuilder({super.key});
-
+  const ExpensesCategoriesDropdownBuilder({
+    super.key,
+    required this.onChanged,
+  });
+  final void Function(String? value)? onChanged;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => ExpensesCategoriesOverviewCubit(
         repository: SupabaseQueryRepository(),
       )..getData(),
-      child: const ExpensesCategoriesDropdown(),
+      child: ExpensesCategoriesDropdown(
+        onChanged: onChanged,
+      ),
     );
   }
 }
 
 class ExpensesCategoriesDropdown extends StatelessWidget {
-  const ExpensesCategoriesDropdown({super.key});
-
+  const ExpensesCategoriesDropdown({
+    super.key,
+    required this.onChanged,
+  });
+  final void Function(String? value)? onChanged;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ExpensesCategoriesOverviewCubit,
@@ -34,7 +42,8 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
         return DropdownButtonFormField(
           selectedItemBuilder: (context) {
             return data.map((ExpenseCategory item) {
-              return ConstrainedBox(
+              return Container(
+                alignment: Alignment.centerLeft,
                 constraints: BoxConstraints(
                     minWidth: 100,
                     maxWidth: MediaQuery.sizeOf(context).width * 0.7),
@@ -42,6 +51,7 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
                   child: Text(
                     item.name,
                     maxLines: 2,
+                    textAlign: TextAlign.start,
                   ),
                 ),
               );
@@ -59,7 +69,7 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
                 child: Text(category.name),
               ),
           ],
-          onChanged: (value) {},
+          onChanged: onChanged,
         );
       },
     );
