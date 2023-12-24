@@ -1,19 +1,31 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import 'package:form_inputs/form_inputs.dart';
+import 'package:query_repository/query_repository.dart';
 
 part 'create_expense_state.dart';
 
 class CreateExpenseCubit extends Cubit<CreateExpenseState> {
-  CreateExpenseCubit() : super(CreateExpenseState.empty);
+  CreateExpenseCubit(
+      {required QueryRepository repository, required String userId})
+      : _repository = repository,
+        _userId = userId,
+        super(CreateExpenseState.empty);
+  final QueryRepository _repository;
+  final String _userId;
 
-  void onChangeCategory(String? value) =>
-      emit(state.copyWith(categoryId: value));
+  void onChangeCategory(String? value) => emit(state.copyWith(
+          categoryId: TextInputValue.validated(
+        value ?? '',
+      )));
 
   void onChangeDate(DateTime? value) => emit(state.copyWith(date: value));
 
-  void onChangePaymentMethod(String? value) =>
-      emit(state.copyWith(paymentMethodId: value));
+  void onChangePaymentMethod(String? value) => emit(state.copyWith(
+          paymentMethodId: TextInputValue.validated(
+        value ?? '',
+      )));
 
   void onChangeName(String value) {
     final previousValue = state.name;
@@ -43,5 +55,32 @@ class CreateExpenseCubit extends Cubit<CreateExpenseState> {
             ),
     );
     emit(newState);
+  }
+
+  void onSubmit() async {
+    try {
+      final finalState = state.copyWith(
+        categoryId: TextInputValue.validated(state.categoryId.value),
+        paymentMethodId: TextInputValue.validated(state.paymentMethodId.value),
+        value: NumberInputValue.validated(state.value.value),
+        name: TextInputValue.validated(state.name.value),
+        date: state.date,
+      );
+      emit(finalState);
+
+      if (finalState.isNotValid) return;
+
+      emit(state.copyWith(status: const FormSubmitLoading()));
+      await _repository.create(
+        createHelper: CreateHelper(
+            tableName: 'expenses',
+            data: {...state.toJson(), 'user_id': _userId}),
+      );
+      emit(state.copyWith(status: const FormSubmitSuccess()));
+    } on CreateError catch (error) {
+      emit(state.copyWith(status: FormSubmitError(error.message)));
+    } catch (error) {
+      emit(state.copyWith(status: FormSubmitError(error.toString())));
+    }
   }
 }

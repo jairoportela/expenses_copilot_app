@@ -39,9 +39,9 @@ class ExpensesHomeScreen extends StatelessWidget {
           children: [Text('Gastos')],
         ),
       ),
-      bottomNavigationBar: NavigationBar(destinations: [
-        const NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-        const NavigationDestination(
+      bottomNavigationBar: NavigationBar(destinations: const [
+        NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
+        NavigationDestination(
             icon: Icon(Icons.settings), label: 'Configuración'),
       ]),
       floatingActionButtonLocation:

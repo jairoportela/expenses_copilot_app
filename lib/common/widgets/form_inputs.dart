@@ -1,4 +1,3 @@
-import 'package:expenses_copilot_app/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_inputs/form_inputs.dart';
@@ -94,6 +93,41 @@ class CustomNumberFormField extends StatelessWidget {
         autofillHints: fieldSettings.autoFillHints,
         keyboardType: fieldSettings.textInputType,
         textCapitalization: fieldSettings.textCapitalization);
+  }
+}
+
+class StringDropdownFormField extends StatelessWidget {
+  const StringDropdownFormField({
+    super.key,
+    required this.text,
+    required this.onChanged,
+    required this.items,
+    this.selectedItemBuilder,
+    this.focusNode,
+    this.icon,
+  });
+
+  final TextInputValue text;
+
+  final void Function(String? value)? onChanged;
+  final FocusNode? focusNode;
+  final List<Widget> Function(BuildContext)? selectedItemBuilder;
+  final List<DropdownMenuItem<String>>? items;
+  final Widget? icon;
+  @override
+  Widget build(BuildContext context) {
+    final textError = text.displayError;
+    return DropdownButtonFormField<String>(
+      focusNode: focusNode,
+      decoration: InputDecoration(
+        errorText: textError?.message,
+      ),
+      selectedItemBuilder: selectedItemBuilder,
+      borderRadius: BorderRadius.circular(20),
+      icon: icon,
+      items: items,
+      onChanged: onChanged,
+    );
   }
 }
 

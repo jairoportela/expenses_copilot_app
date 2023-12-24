@@ -11,16 +11,16 @@ class CreateExpenseState extends Equatable {
   });
 
   final FormSubmitStatus status;
-  final String categoryId;
-  final String paymentMethodId;
+  final TextInputValue categoryId;
+  final TextInputValue paymentMethodId;
   final TextInputValue name;
   final NumberInputValue value;
   final DateTime date;
 
   CreateExpenseState copyWith({
     FormSubmitStatus? status,
-    String? categoryId,
-    String? paymentMethodId,
+    TextInputValue? categoryId,
+    TextInputValue? paymentMethodId,
     TextInputValue? name,
     NumberInputValue? value,
     DateTime? date,
@@ -37,12 +37,27 @@ class CreateExpenseState extends Equatable {
 
   static CreateExpenseState empty = CreateExpenseState(
     status: const FormSubmitInitial(),
-    categoryId: '',
-    paymentMethodId: '',
+    categoryId: const TextInputValue.unvalidated(),
+    paymentMethodId: const TextInputValue.unvalidated(),
     name: const TextInputValue.unvalidated(),
     value: const NumberInputValue.unvalidated(),
     date: DateTime.now(),
   );
+
+  Map<String, dynamic> toJson() => {
+        'name': name.value,
+        'value': double.tryParse(name.value) ?? 0,
+        'category_id': categoryId.value,
+        'payment_id': paymentMethodId.value,
+        'date': date.toUtc().toIso8601String(),
+      };
+
+  bool get isNotValid =>
+      categoryId.isNotValid ||
+      paymentMethodId.isNotValid ||
+      value.isNotValid ||
+      name.isNotValid;
+  bool get isValid => !isNotValid;
 
   @override
   List<Object> get props => [
