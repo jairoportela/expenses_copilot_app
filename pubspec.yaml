@@ -34,6 +34,8 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
+  query_repository:
+    path: packages/query_repository
   form_inputs:
     path: packages/form_inputs
 

@@ -1,5 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:expenses_copilot_app/authentication/presentation/providers/app_bloc/app_bloc.dart';
+import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
 import 'package:expenses_copilot_app/authentication/presentation/screens/login_screen.dart';
 import 'package:expenses_copilot_app/config/router.dart';
 import 'package:expenses_copilot_app/config/theme.dart';
