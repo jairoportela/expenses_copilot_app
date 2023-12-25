@@ -6,10 +6,12 @@ class ExpenseCategory {
   });
   final String id;
   final String name;
-  final String? icon;
+  final int? icon;
 
   factory ExpenseCategory.fromJson(Map<String, dynamic> json) {
     return ExpenseCategory(
-        id: json['id'], name: json['name'], icon: json['icon']);
+        id: json['id'],
+        name: json['name'],
+        icon: int.tryParse(json['icon'] ?? ''));
   }
 }

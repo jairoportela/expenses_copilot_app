@@ -35,20 +35,24 @@ class SupabaseQueryRepository extends QueryRepository {
     }
   }
 
-  supabase.PostgrestFilterBuilder<List<Map<String, dynamic>>?> _getQuery(
+  supabase.PostgrestTransformBuilder<List<Map<String, dynamic>>?> _getQuery(
       QueryHelper queryHelper) {
     var query =
         _client.from(queryHelper.tableName).select(queryHelper.selectString);
     if (queryHelper.filter != null) {
-      query.match(queryHelper.filter!);
+      query = query.match(queryHelper.filter!);
     }
+
+    supabase.PostgrestTransformBuilder<List<Map<String, dynamic>>?> queryOrder =
+        query;
 
     //Siempre debe ir de ultimo el order
     if (queryHelper.orderFilter != null) {
-      query.order(queryHelper.orderFilter!.columnName,
+      queryOrder = query.order(queryHelper.orderFilter!.columnName,
           ascending: queryHelper.orderFilter!.ascending);
     }
-    return query;
+
+    return queryOrder;
   }
 
   @override

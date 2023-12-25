@@ -1,9 +1,11 @@
 import 'package:expenses_copilot_app/categories/data/models/expense_category.dart';
 import 'package:expenses_copilot_app/categories/providers/expenses_categories_overview/expenses_categories_overview_cubit.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
+import 'package:expenses_copilot_app/common/widgets/number_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
+import 'package:gap/gap.dart';
 
 import 'package:query_repository/query_repository.dart';
 
@@ -57,10 +59,9 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
                     minWidth: 100,
                     maxWidth: MediaQuery.sizeOf(context).width * 0.7),
                 child: FittedBox(
-                  child: Text(
-                    item.name,
-                    maxLines: 2,
-                    textAlign: TextAlign.start,
+                  child: CategoryRowText(
+                    icon: item.icon,
+                    name: item.name,
                   ),
                 ),
               );
@@ -74,11 +75,40 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
             for (var category in data)
               DropdownMenuItem(
                 value: category.id,
-                child: FittedBox(child: Text(category.name)),
+                child: FittedBox(
+                  child: CategoryRowText(
+                    icon: category.icon,
+                    name: category.name,
+                  ),
+                ),
               ),
           ],
         );
       },
     );
+  }
+}
+
+class CategoryRowText extends StatelessWidget {
+  const CategoryRowText({
+    super.key,
+    required this.name,
+    required this.icon,
+  });
+  final String name;
+  final int? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      if (icon != null) ...[
+        Icon(NumberIcons.getIconByNumber(icon!)),
+        const Gap(10)
+      ],
+      Text(
+        name,
+        maxLines: 2,
+      )
+    ]);
   }
 }

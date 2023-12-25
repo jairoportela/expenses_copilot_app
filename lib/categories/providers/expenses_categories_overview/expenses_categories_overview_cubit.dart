@@ -20,6 +20,7 @@ class ExpensesCategoriesOverviewCubit
           tableName: 'expenses_categories',
           selectString: '*',
           fromJson: ExpenseCategory.fromJson,
+          orderFilter: OrderFilter(ascending: true, columnName: 'name'),
         ),
       );
       emit(ExpensesCategoriesOverviewSuccess(data));
