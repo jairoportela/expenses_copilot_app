@@ -3,6 +3,8 @@ import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
 import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
 import 'package:expenses_copilot_app/expenses/providers/bloc/expenses_overview_bloc.dart';
+import 'package:expenses_copilot_app/utils/date_format.dart';
+import 'package:expenses_copilot_app/utils/number_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:query_repository/query_repository.dart';
@@ -33,9 +35,6 @@ class ExpensesHomeScreen extends StatelessWidget {
           ],
         ),
       )),
-      appBar: AppBar(
-        title: const Text('Gastos'),
-      ),
       body: BlocProvider(
         create: (_) => ExpensesOverviewBloc(
           repository: ExpensesRepositoryImplementation(
@@ -71,17 +70,55 @@ class ListExpensesBuilder extends StatelessWidget {
           ExpensesOverviewSuccess() => state.data,
           _ => <Expense>[],
         };
-        return ListView.builder(
-          padding: const EdgeInsets.all(20),
-          itemBuilder: (context, index) {
-            final item = data[index];
-            return ListTile(
-              title: Text(item.name),
-              subtitle: Text(item.expenseCategory.name),
-              trailing: Text('\$${item.value.toString()}'),
-            );
-          },
-          itemCount: data.length,
+
+        Map<String, List<Expense>> groupExpenses = {};
+
+        // Agrupa los gastos por día
+        for (var expense in data) {
+          final String formatDate = expense.date.formatDateTitle();
+
+          if (!groupExpenses.containsKey(formatDate)) {
+            groupExpenses[formatDate] = [];
+          }
+
+          groupExpenses[formatDate]!.add(expense);
+        }
+
+        return CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              pinned: true,
+              title: Text('Gastos'),
+            ),
+            for (var key in groupExpenses.keys) ...[
+              SliverPadding(
+                padding: const EdgeInsets.all(20),
+                sliver: SliverToBoxAdapter(
+                  child: Text(
+                    key,
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverList.builder(
+                  itemBuilder: (context, index) {
+                    final item = groupExpenses[key]![index];
+                    return ListTile(
+                      title: Text(item.name),
+                      subtitle: Text(item.expenseCategory.name),
+                      trailing: Text(
+                        item.value.toCOPFormat(),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  },
+                  itemCount: groupExpenses[key]!.length,
+                ),
+              )
+            ]
+          ],
         );
       },
     );

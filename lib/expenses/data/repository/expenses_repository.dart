@@ -33,11 +33,17 @@ class ExpensesRepositoryImplementation extends ExpensesRepository {
     )
         .asyncMap((event) async {
       final data = await _dataSource.getAll(
-          queryHelper: const QueryHelper(
-              tableName: _tableName,
-              selectString:
-                  '''*,expenses_categories(id,name),payment_methods(id,name)''',
-              fromJson: Expense.fromJson));
+        queryHelper: const QueryHelper(
+          tableName: _tableName,
+          selectString:
+              '''*,expenses_categories(id,name),payment_methods(id,name)''',
+          fromJson: Expense.fromJson,
+          orderFilter: OrderFilter(
+            ascending: false,
+            columnName: 'date',
+          ),
+        ),
+      );
       return data;
     });
   }

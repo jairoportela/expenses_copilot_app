@@ -42,6 +42,12 @@ class SupabaseQueryRepository extends QueryRepository {
     if (queryHelper.filter != null) {
       query.match(queryHelper.filter!);
     }
+
+    //Siempre debe ir de ultimo el order
+    if (queryHelper.orderFilter != null) {
+      query.order(queryHelper.orderFilter!.columnName,
+          ascending: queryHelper.orderFilter!.ascending);
+    }
     return query;
   }
 
