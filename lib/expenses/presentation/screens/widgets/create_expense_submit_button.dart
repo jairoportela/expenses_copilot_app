@@ -1,14 +1,14 @@
-import 'package:expenses_copilot_app/authentication/providers/login_cubit/login_cubit.dart';
+import 'package:expenses_copilot_app/expenses/providers/create_expense/create_expense_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 
-class SingInSubmitButton extends StatelessWidget {
-  const SingInSubmitButton({super.key});
+class CreateExpenseSubmitButton extends StatelessWidget {
+  const CreateExpenseSubmitButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LoginCubit, LoginState>(
+    return BlocConsumer<CreateExpenseCubit, CreateExpenseState>(
       listener: (context, state) {
         final status = state.status;
         if (status is FormSubmitSuccess) {
@@ -16,9 +16,11 @@ class SingInSubmitButton extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
               content: Text(
-                'Inicio de sesión exitoso.',
+                'Gasto creado con exito ✅',
               ),
             ));
+
+          Navigator.of(context).pop();
         }
         if (status is FormSubmitError) {
           ScaffoldMessenger.of(context)
@@ -40,8 +42,8 @@ class SingInSubmitButton extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         return FilledButton(
-          onPressed: context.read<LoginCubit>().onSubmit,
-          child: const Text('Iniciar sesión'),
+          onPressed: context.read<CreateExpenseCubit>().onSubmit,
+          child: const Text('Agregar gasto'),
         );
       },
     );

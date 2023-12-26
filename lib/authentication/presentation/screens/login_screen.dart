@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
-import 'package:expenses_copilot_app/authentication/presentation/providers/login_cubit/login_cubit.dart';
+import 'package:expenses_copilot_app/authentication/providers/login_cubit/login_cubit.dart';
 import 'package:expenses_copilot_app/authentication/presentation/widgets/email_form_field.dart';
 import 'package:expenses_copilot_app/authentication/presentation/widgets/password_form_field.dart';
 import 'package:expenses_copilot_app/authentication/presentation/widgets/signin_submit_button.dart';

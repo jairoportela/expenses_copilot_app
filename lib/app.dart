@@ -1,5 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:expenses_copilot_app/authentication/presentation/providers/app_bloc/app_bloc.dart';
+import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
 import 'package:expenses_copilot_app/authentication/presentation/screens/login_screen.dart';
 import 'package:expenses_copilot_app/config/router.dart';
 import 'package:expenses_copilot_app/config/theme.dart';
@@ -8,19 +8,30 @@ import 'package:expenses_copilot_app/expenses/presentation/screens/expenses_home
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:query_repository/query_repository.dart';
 
 class ExpensesCopilotApp extends StatelessWidget {
   const ExpensesCopilotApp({
     super.key,
     required AuthenticationRepository authRepository,
-  }) : _authRepository = authRepository;
+    required QueryRepository queryRepository,
+  })  : _authRepository = authRepository,
+        _queryRepository = queryRepository;
   final AuthenticationRepository _authRepository;
+  final QueryRepository _queryRepository;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider.value(
-      value: _authRepository,
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(
+          value: _authRepository,
+        ),
+        RepositoryProvider.value(
+          value: _queryRepository,
+        ),
+      ],
       child: BlocProvider(
         lazy: false,
         create: (_) => AppBloc(authenticationRepository: _authRepository)

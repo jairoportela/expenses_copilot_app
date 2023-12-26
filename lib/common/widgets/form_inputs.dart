@@ -1,5 +1,5 @@
-import 'package:expenses_copilot_app/config/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:form_inputs/form_inputs.dart';
 
 class CustomInputField extends StatelessWidget {
@@ -52,18 +52,82 @@ class CustomTextFormField extends StatelessWidget {
         controller: controller,
         decoration: InputDecoration(
           errorText: textError?.message,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          filled: true,
-          hintStyle: const TextStyle(color: AppColors.grey800),
-          fillColor: AppColors.grey,
         ),
         onChanged: onChanged,
         textInputAction: fieldSettings.textInputAction,
         autofillHints: fieldSettings.autoFillHints,
         keyboardType: fieldSettings.textInputType,
         textCapitalization: fieldSettings.textCapitalization);
+  }
+}
+
+class CustomNumberFormField extends StatelessWidget {
+  const CustomNumberFormField({
+    super.key,
+    required this.fieldSettings,
+    required this.text,
+    required this.onChanged,
+    this.controller,
+    this.focusNode,
+  });
+  final TextFieldSettings fieldSettings;
+  final NumberInputValue text;
+  final TextEditingController? controller;
+  final void Function(String value)? onChanged;
+  final FocusNode? focusNode;
+
+  @override
+  Widget build(BuildContext context) {
+    final textError = text.displayError;
+    return TextField(
+        focusNode: focusNode,
+        controller: controller,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+        ],
+        decoration: InputDecoration(
+          errorText: textError?.message,
+        ),
+        onChanged: onChanged,
+        textInputAction: fieldSettings.textInputAction,
+        autofillHints: fieldSettings.autoFillHints,
+        keyboardType: fieldSettings.textInputType,
+        textCapitalization: fieldSettings.textCapitalization);
+  }
+}
+
+class StringDropdownFormField extends StatelessWidget {
+  const StringDropdownFormField({
+    super.key,
+    required this.text,
+    required this.onChanged,
+    required this.items,
+    this.selectedItemBuilder,
+    this.focusNode,
+    this.icon,
+  });
+
+  final TextInputValue text;
+
+  final void Function(String? value)? onChanged;
+  final FocusNode? focusNode;
+  final List<Widget> Function(BuildContext)? selectedItemBuilder;
+  final List<DropdownMenuItem<String>>? items;
+  final Widget? icon;
+  @override
+  Widget build(BuildContext context) {
+    final textError = text.displayError;
+    return DropdownButtonFormField<String>(
+      focusNode: focusNode,
+      decoration: InputDecoration(
+        errorText: textError?.message,
+      ),
+      selectedItemBuilder: selectedItemBuilder,
+      borderRadius: BorderRadius.circular(20),
+      icon: icon,
+      items: items,
+      onChanged: onChanged,
+    );
   }
 }
 
