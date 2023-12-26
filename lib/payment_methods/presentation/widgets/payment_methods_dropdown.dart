@@ -68,7 +68,7 @@ class PaymentMethodsDropdown extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_forward_ios_rounded,
-            color: Colors.black,
+            color: Colors.white,
           ),
           items: [
             for (var paymentMethod in data)

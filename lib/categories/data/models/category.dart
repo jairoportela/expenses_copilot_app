@@ -1,5 +1,5 @@
-class ExpenseCategory {
-  const ExpenseCategory({
+class Category {
+  const Category({
     required this.id,
     required this.name,
     required this.icon,
@@ -8,8 +8,8 @@ class ExpenseCategory {
   final String name;
   final int? icon;
 
-  factory ExpenseCategory.fromJson(Map<String, dynamic> json) {
-    return ExpenseCategory(
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
         id: json['id'],
         name: json['name'],
         icon: int.tryParse(json['icon'] ?? ''));

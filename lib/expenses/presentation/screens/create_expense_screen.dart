@@ -1,5 +1,6 @@
 import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
-import 'package:expenses_copilot_app/categories/presentation/widgets/expenses_categories_dropdown.dart';
+import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
+import 'package:expenses_copilot_app/categories/presentation/widgets/categories_dropdown.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
 import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
@@ -106,7 +107,8 @@ class CreateExpenseForm extends StatelessWidget {
               return CustomInputField(
                 isRequired: true,
                 title: 'Categoría',
-                child: ExpensesCategoriesDropdownBuilder(
+                child: CategoriesDropdownBuilder(
+                  type: CategoryType.expense,
                   text: value,
                   onChanged:
                       context.read<CreateExpenseCubit>().onChangeCategory,

@@ -36,7 +36,7 @@ class ExpensesRepositoryImplementation extends ExpensesRepository {
         queryHelper: const QueryHelper(
           tableName: _tableName,
           selectString:
-              '''*,expenses_categories(id,name,icon),payment_methods(id,name,icon)''',
+              '''*,categories(id,name,icon),payment_methods(id,name,icon)''',
           fromJson: Expense.fromJson,
           orderFilter: OrderFilter(
             ascending: false,

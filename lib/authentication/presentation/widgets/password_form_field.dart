@@ -49,12 +49,6 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
         obscureText: !showPassword,
         decoration: InputDecoration(
           errorText: textError?.error,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          filled: true,
-          hintStyle: const TextStyle(color: AppColors.grey800),
-          fillColor: AppColors.grey,
           suffixIcon: Padding(
             padding: const EdgeInsetsDirectional.only(end: 8.0),
             child: IconButton(

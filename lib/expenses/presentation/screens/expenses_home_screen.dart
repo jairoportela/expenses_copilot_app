@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
 import 'package:expenses_copilot_app/common/widgets/number_icon.dart';
-import 'package:expenses_copilot_app/config/colors.dart';
 import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
 import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
@@ -94,12 +93,17 @@ class ListExpensesBuilder extends StatelessWidget {
           slivers: [
             SliverAppBar(
               pinned: true,
-              leading: const Padding(
-                padding: EdgeInsets.all(10.0),
-                child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1200px-User-avatar.svg.png',
-                )),
+              leading: GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: CircleAvatar(
+                      backgroundImage: NetworkImage(
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1200px-User-avatar.svg.png',
+                  )),
+                ),
               ),
               actions: [
                 IconButton(
