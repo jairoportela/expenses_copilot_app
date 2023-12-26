@@ -1,9 +1,8 @@
 import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
-import 'package:expenses_copilot_app/config/colors.dart';
+import 'package:expenses_copilot_app/common/widgets/number_icon.dart';
 import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
 import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
-import 'package:expenses_copilot_app/expenses/presentation/screens/widgets/icon_circular_widget.dart';
 import 'package:expenses_copilot_app/expenses/providers/bloc/expenses_overview_bloc.dart';
 import 'package:expenses_copilot_app/utils/date_format.dart';
 import 'package:expenses_copilot_app/utils/number_format.dart';
@@ -110,10 +109,10 @@ class ListExpensesBuilder extends StatelessWidget {
                     return ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: item.expenseCategory.icon != null
-                          ? IconCircularWidget(
-                              backgroundColor:
-                                  AppColors.primary.withOpacity(0.15),
-                              iconCodePoint: item.expenseCategory.icon!,
+                          ? Icon(
+                              NumberIcons.getIconByNumber(
+                                  item.expenseCategory.icon!),
+                              color: Colors.black,
                             )
                           : null,
                       title: Text(item.name),

@@ -41,7 +41,7 @@ class CreateExpenseState extends Equatable {
     paymentMethodId: const TextInputValue.unvalidated(),
     name: const TextInputValue.unvalidated(),
     value: const NumberInputValue.unvalidated(),
-    date: DateTime.now(),
+    date: DateTime.now().withoutHours,
   );
 
   Map<String, dynamic> toJson() => {
