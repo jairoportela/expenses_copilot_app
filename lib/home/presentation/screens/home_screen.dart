@@ -5,6 +5,7 @@ import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_
 import 'package:expenses_copilot_app/monthly_statistics/presentation/widgets/monthly_summary_card.dart';
 import 'package:expenses_copilot_app/transactions/presentation/screens/all_transactions_screen.dart';
 import 'package:expenses_copilot_app/transactions/presentation/widgets/recents_transactions.dart';
+import 'package:expenses_copilot_app/utils/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -137,17 +138,22 @@ class HomeBuilder extends StatelessWidget {
       slivers: [
         SliverAppBar(
           pinned: true,
-          leading: GestureDetector(
-            onTap: () {
-              Scaffold.of(context).openDrawer();
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(10.0),
-              child: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1200px-User-avatar.svg.png',
-              )),
-            ),
+          automaticallyImplyLeading: false,
+          leadingWidth: 100,
+          leading: Row(
+            children: [
+              const SizedBox(width: 20),
+              GestureDetector(
+                onTap: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                child: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                  context.read<AppBloc>().state.user.profileImage ??
+                      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/1200px-User-avatar.svg.png',
+                )),
+              ),
+            ],
           ),
           actions: [
             IconButton(
@@ -158,6 +164,30 @@ class HomeBuilder extends StatelessWidget {
               iconSize: 30,
             )
           ],
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          sliver: SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  DateTime.now().formatHoursTitle(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  context.read<AppBloc>().state.user.name ?? '',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
         ),
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
