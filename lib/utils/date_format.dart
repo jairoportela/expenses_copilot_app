@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 extension DateFormatExtension on DateTime {
-  yMMMd() => DateFormat.yMMMd().format(this);
+  yMMMd() => DateFormat.yMMMd('es_US').format(this);
 
   get withoutHours => DateTime(year, month, day);
 

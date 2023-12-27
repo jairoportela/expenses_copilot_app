@@ -95,7 +95,9 @@ class ListTransactionsBuilder extends StatelessWidget {
                 sliver: SliverList.builder(
                   itemBuilder: (context, index) {
                     final item = groupExpenses[key]![index];
-                    return TransactionListItem(item: item);
+                    return TransactionListItem(
+                      item: item,
+                    );
                   },
                   itemCount: groupExpenses[key]!.length,
                 ),

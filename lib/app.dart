@@ -3,7 +3,7 @@ import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.
 import 'package:expenses_copilot_app/authentication/presentation/screens/login_screen.dart';
 import 'package:expenses_copilot_app/config/router.dart';
 import 'package:expenses_copilot_app/config/theme.dart';
-import 'package:expenses_copilot_app/expenses/presentation/screens/expenses_home_screen.dart';
+import 'package:expenses_copilot_app/home/presentation/screens/home_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,13 +70,14 @@ class _AppViewState extends State<AppView> {
         Locale('es', 'CO'),
         Locale('es', 'MX'),
       ],
+      locale: const Locale('es', 'CO'),
       builder: (context, child) {
         return BlocListener<AppBloc, AppState>(
           listener: (context, state) {
             switch (state.status) {
               case AppStatus.authenticated:
                 _navigator.pushNamedAndRemoveUntil<void>(
-                  ExpensesHomeScreen.routeName,
+                  HomeScreen.routeName,
                   (route) => false,
                 );
               case AppStatus.unauthenticated:

@@ -1,12 +1,15 @@
 import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
 import 'package:expenses_copilot_app/common/widgets/number_icon.dart';
 import 'package:expenses_copilot_app/transactions/data/models/transaction.dart';
+import 'package:expenses_copilot_app/utils/date_format.dart';
 import 'package:expenses_copilot_app/utils/number_format.dart';
 import 'package:flutter/material.dart';
 
 class TransactionListItem extends StatelessWidget {
-  const TransactionListItem({super.key, required this.item});
+  const TransactionListItem(
+      {super.key, required this.item, this.showDate = false});
   final Transaction item;
+  final bool showDate;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class TransactionListItem extends StatelessWidget {
             )
           : null,
       title: Text(item.name),
-      subtitle: Text(item.category.name),
+      subtitle: showDate ? Text(item.date.yMMMd()) : Text(item.category.name),
       trailing: Text(
         item.value.toCOPFormatWithSign(),
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(

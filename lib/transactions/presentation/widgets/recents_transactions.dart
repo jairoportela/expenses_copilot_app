@@ -57,7 +57,10 @@ class ListTransactionsBuilder extends StatelessWidget {
             itemCount: data.length,
             itemBuilder: (context, index) {
               final item = data[index];
-              return TransactionListItem(item: item);
+              return TransactionListItem(
+                item: item,
+                showDate: true,
+              );
             },
           ),
         );

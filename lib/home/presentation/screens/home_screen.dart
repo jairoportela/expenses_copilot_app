@@ -1,5 +1,7 @@
 import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
+import 'package:expenses_copilot_app/home/presentation/widgets/expandable_fab.dart';
+import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_screen.dart';
 import 'package:expenses_copilot_app/transactions/presentation/screens/all_transactions_screen.dart';
 import 'package:expenses_copilot_app/transactions/presentation/widgets/recents_transactions.dart';
 import 'package:expenses_copilot_app/utils/number_format.dart';
@@ -7,9 +9,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ExpensesHomeScreen extends StatelessWidget {
-  static const routeName = '/expenses';
-  const ExpensesHomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  static const routeName = '/home';
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late final PageController _myPage;
+
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    _myPage = PageController(initialPage: _currentPage);
+    super.initState();
+  }
+
+  void _showAction(BuildContext context, int index) {
+    if (index == 0) {
+      Navigator.of(context).pushNamed(CreateExpenseScreen.routeName);
+    }
+    if (index == 1) {
+      Navigator.of(context).pushNamed(CreateIncomeScreen.routeName);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +59,71 @@ class ExpensesHomeScreen extends StatelessWidget {
           ],
         ),
       )),
-      body: const HomeBuilder(),
-      bottomNavigationBar: NavigationBar(destinations: const [
-        NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-        NavigationDestination(
-            icon: Icon(Icons.settings), label: 'Configuración'),
-      ]),
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).pushNamed(CreateExpenseScreen.routeName),
-        child: const Icon(Icons.add),
+      body: PageView(
+        controller: _myPage,
+        onPageChanged: (int page) {
+          setState(() {
+            _currentPage = page;
+          });
+        },
+        physics: const NeverScrollableScrollPhysics(),
+        children: const [
+          HomeBuilder(),
+          Center(
+            child: SizedBox(
+              child: Text('En construcción 1'),
+            ),
+          ),
+          Center(
+            child: SizedBox(
+              child: Text('En construcción 2'),
+            ),
+          ),
+        ], // Comment this if you need to use Swipe.
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          children: [
+            NavigationButton(
+              isSelected: _currentPage == 0,
+              onSelected: () {
+                _myPage.jumpToPage(0);
+              },
+              icon: Icons.home,
+              label: 'Home',
+            ),
+            NavigationButton(
+              isSelected: _currentPage == 1,
+              onSelected: () {
+                _myPage.jumpToPage(1);
+              },
+              icon: Icons.bar_chart_rounded,
+              label: 'Estadísticas',
+            ),
+            NavigationButton(
+              isSelected: _currentPage == 2,
+              onSelected: () {
+                _myPage.jumpToPage(2);
+              },
+              icon: Icons.settings,
+              label: 'Configuración',
+            ),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: ExpandableFab(
+        distance: 60,
+        children: [
+          ActionButton(
+            onPressed: () => _showAction(context, 0),
+            icon: const Icon(Icons.money_off),
+          ),
+          ActionButton(
+            onPressed: () => _showAction(context, 1),
+            icon: const Icon(Icons.attach_money),
+          ),
+        ],
       ),
     );
   }
@@ -153,6 +232,46 @@ class HomeBuilder extends StatelessWidget {
         ),
         const RecentTransactionListBuilder(),
       ],
+    );
+  }
+}
+
+class NavigationButton extends StatelessWidget {
+  const NavigationButton({
+    super.key,
+    required this.isSelected,
+    required this.onSelected,
+    required this.icon,
+    required this.label,
+  });
+
+  final bool isSelected;
+  final VoidCallback onSelected;
+  final String label;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      color: Theme.of(context).colorScheme.surface,
+      tooltip: label,
+      icon: isSelected
+          ? Chip(
+              elevation: 1,
+              backgroundColor: const Color.fromRGBO(159, 202, 255, 0.28),
+              side: BorderSide.none,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100)),
+              label: Icon(
+                icon,
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
+            )
+          : Icon(
+              icon,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+      onPressed: onSelected,
     );
   }
 }

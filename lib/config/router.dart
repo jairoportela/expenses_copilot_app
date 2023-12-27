@@ -1,6 +1,7 @@
 import 'package:expenses_copilot_app/authentication/presentation/screens/login_screen.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
-import 'package:expenses_copilot_app/expenses/presentation/screens/expenses_home_screen.dart';
+import 'package:expenses_copilot_app/home/presentation/screens/home_screen.dart';
+import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_screen.dart';
 import 'package:expenses_copilot_app/transactions/presentation/screens/all_transactions_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +12,9 @@ class RouteGenerator {
         return MaterialPageRoute<void>(
           builder: (_) => const LoadingScreen(),
         );
-      case ExpensesHomeScreen.routeName:
+      case HomeScreen.routeName:
         return MaterialPageRoute<void>(
-          builder: (_) => const ExpensesHomeScreen(),
+          builder: (_) => const HomeScreen(),
         );
       case LoginScreen.routeName:
         return MaterialPageRoute<void>(
@@ -22,6 +23,10 @@ class RouteGenerator {
       case CreateExpenseScreen.routeName:
         return MaterialPageRoute<void>(
           builder: (_) => const CreateExpenseScreen(),
+        );
+      case CreateIncomeScreen.routeName:
+        return MaterialPageRoute<void>(
+          builder: (_) => const CreateIncomeScreen(),
         );
       case AllTransactionsScreen.routeName:
         return MaterialPageRoute<void>(
