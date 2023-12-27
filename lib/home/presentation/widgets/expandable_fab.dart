@@ -11,7 +11,7 @@ class ExpandableFab extends StatefulWidget {
 
   final bool? initialOpen;
   final double distance;
-  final List<Widget> children;
+  final List<ActionButton> children;
 
   @override
   State<ExpandableFab> createState() => _ExpandableFabState();
@@ -152,7 +152,7 @@ class _ExpandingActionButton extends StatelessWidget {
   final double directionInDegrees;
   final double maxDistance;
   final Animation<double> progress;
-  final Widget child;
+  final ActionButton child;
 
   @override
   Widget build(BuildContext context) {
