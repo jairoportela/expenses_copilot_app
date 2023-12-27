@@ -2,12 +2,11 @@ import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
 import 'package:expenses_copilot_app/home/presentation/widgets/expandable_fab.dart';
 import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_screen.dart';
+import 'package:expenses_copilot_app/monthly_statistics/presentation/widgets/monthly_summary_card.dart';
 import 'package:expenses_copilot_app/transactions/presentation/screens/all_transactions_screen.dart';
 import 'package:expenses_copilot_app/transactions/presentation/widgets/recents_transactions.dart';
-import 'package:expenses_copilot_app/utils/number_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -172,45 +171,7 @@ class HomeBuilder extends StatelessWidget {
                       onPressed: () {},
                       icon: const Icon(Icons.arrow_forward_ios_rounded)),
                 ),
-                Card(
-                  color:
-                      const Color.fromRGBO(26, 63, 101, 0.187).withOpacity(0.1),
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Tu plata en diciembre'),
-                          const Gap(5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Ingresos'),
-                              Text('+ ${10000.0.toCOPFormat()}')
-                            ],
-                          ),
-                          const Gap(5),
-                          const LinearProgressIndicator(
-                            value: 70 / 100,
-                            color: Colors.greenAccent,
-                          ),
-                          const Gap(10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text('Gastos'),
-                              Text('- ${5000.0.toCOPFormat()}')
-                            ],
-                          ),
-                          const Gap(5),
-                          const LinearProgressIndicator(
-                            value: 30 / 100,
-                            color: Colors.redAccent,
-                          ),
-                        ]),
-                  ),
-                )
+                const MonthlySummaryBuilder(),
               ],
             ),
           ),

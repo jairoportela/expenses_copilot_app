@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 abstract class QueryRepository {
   Future<List<R>> getAll<R>({required QueryHelper<R> queryHelper});
+  Future<R> getOne<R>({required QueryHelper<R> queryHelper});
   Future<bool> create({required CreateHelper createHelper});
   Future<R> createWithValue<R>(
       {required CreateHelperWithValue<R> createHelper});
@@ -28,6 +29,18 @@ class SupabaseQueryRepository extends QueryRepository {
       if (data == null) throw const QueryError(message: '');
       final result = data.map((e) => queryHelper.fromJson(e)).toList();
       return result;
+    } on QueryError {
+      rethrow;
+    } catch (error) {
+      throw const QueryError(message: 'Un error ha ocurrido');
+    }
+  }
+
+  @override
+  Future<R> getOne<R>({required QueryHelper<R> queryHelper}) async {
+    try {
+      final data = await _getQuery(queryHelper).limit(1).single();
+      return queryHelper.fromJson(data);
     } on QueryError {
       rethrow;
     } catch (error) {

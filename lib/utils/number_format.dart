@@ -10,7 +10,7 @@ extension NumberFormatExtension on double {
   }
 
   String toCOPFormatWithSign([decimalDigits = 0]) {
-    return '${sign >= 0 ? '' : '- '}${NumberFormat.currency(
+    return '${sign >= 0 ? '+ ' : '- '}${NumberFormat.currency(
       locale: 'es',
       decimalDigits: decimalDigits,
       customPattern: '\$###,###',
