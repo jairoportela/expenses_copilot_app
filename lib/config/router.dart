@@ -1,6 +1,7 @@
 import 'package:expenses_copilot_app/authentication/presentation/screens/login_screen.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/expenses_home_screen.dart';
+import 'package:expenses_copilot_app/transactions/presentation/screens/all_transactions_screen.dart';
 import 'package:flutter/material.dart';
 
 class RouteGenerator {
@@ -21,6 +22,10 @@ class RouteGenerator {
       case CreateExpenseScreen.routeName:
         return MaterialPageRoute<void>(
           builder: (_) => const CreateExpenseScreen(),
+        );
+      case AllTransactionsScreen.routeName:
+        return MaterialPageRoute<void>(
+          builder: (_) => const AllTransactionsScreen(),
         );
 
       default:

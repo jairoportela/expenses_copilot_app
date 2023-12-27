@@ -1,5 +1,4 @@
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
-import 'package:expenses_copilot_app/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:form_inputs/form_inputs.dart';
 

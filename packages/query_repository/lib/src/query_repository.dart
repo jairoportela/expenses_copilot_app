@@ -42,6 +42,12 @@ class SupabaseQueryRepository extends QueryRepository {
     if (queryHelper.filter != null) {
       query = query.match(queryHelper.filter!);
     }
+    if (queryHelper.inFilter != null) {
+      query = query.inFilter(
+        queryHelper.inFilter!.columnName,
+        queryHelper.inFilter!.dataToFilter,
+      );
+    }
 
     supabase.PostgrestTransformBuilder<List<Map<String, dynamic>>?> queryOrder =
         query;
@@ -92,6 +98,6 @@ class SupabaseQueryRepository extends QueryRepository {
       {required SubscribeHelper subscribeHelper}) {
     return _client
         .from(subscribeHelper.tableName)
-        .stream(primaryKey: [subscribeHelper.primaryKey]);
+        .stream(primaryKey: subscribeHelper.primaryKey);
   }
 }

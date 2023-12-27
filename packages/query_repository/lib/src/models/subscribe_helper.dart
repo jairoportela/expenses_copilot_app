@@ -5,5 +5,5 @@ class SubscribeHelper {
   });
 
   final String tableName;
-  final String primaryKey;
+  final List<String> primaryKey;
 }

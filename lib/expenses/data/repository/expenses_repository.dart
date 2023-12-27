@@ -29,7 +29,7 @@ class ExpensesRepositoryImplementation extends ExpensesRepository {
     return _dataSource
         .subscribe(
       subscribeHelper:
-          const SubscribeHelper(tableName: _tableName, primaryKey: 'id'),
+          const SubscribeHelper(tableName: _tableName, primaryKey: ['id']),
     )
         .asyncMap((event) async {
       final data = await _dataSource.getAll(
