@@ -33,8 +33,12 @@ class SupabaseAuthenticationRepository extends AuthenticationRepository {
   @override
   Stream<User> get user async* {
     try {
-      final user = _supabase.auth.currentUser;
-      if (user != null) yield user.toUser;
+      final session = _supabase.auth.currentSession;
+      final isSessionExpired = session?.isExpired;
+      if (isSessionExpired != true && session != null) {
+        final user = session.user;
+        yield user.toUser;
+      }
     } catch (_) {}
     yield* _supabase.auth.onAuthStateChange.asyncMap((data) async {
       final supabase.User? user = data.session?.user;
@@ -85,8 +89,13 @@ class SupabaseAuthenticationRepository extends AuthenticationRepository {
 }
 
 extension on supabase.User {
-  /// Maps a [firebase_auth.User] into a [User].
+  /// Maps a [supabase.User] into a [User].
   User get toUser {
-    return User(id: id, email: email);
+    return User(
+      id: id,
+      email: email,
+      name: userMetadata?['name'],
+      profileImage: userMetadata?['photo_url'],
+    );
   }
 }

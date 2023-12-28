@@ -29,14 +29,14 @@ class ExpensesRepositoryImplementation extends ExpensesRepository {
     return _dataSource
         .subscribe(
       subscribeHelper:
-          const SubscribeHelper(tableName: _tableName, primaryKey: 'id'),
+          const SubscribeHelper(tableName: _tableName, primaryKey: ['id']),
     )
         .asyncMap((event) async {
       final data = await _dataSource.getAll(
         queryHelper: const QueryHelper(
           tableName: _tableName,
           selectString:
-              '''*,expenses_categories(id,name,icon),payment_methods(id,name,icon)''',
+              '''*,categories(id,name,icon),payment_methods(id,name,icon)''',
           fromJson: Expense.fromJson,
           orderFilter: OrderFilter(
             ascending: false,

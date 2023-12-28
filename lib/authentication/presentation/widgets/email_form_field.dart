@@ -1,5 +1,4 @@
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
-import 'package:expenses_copilot_app/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:form_inputs/form_inputs.dart';
 
@@ -37,12 +36,6 @@ class _EmailFormFieldState extends State<EmailFormField> {
       controller: _controller,
       decoration: InputDecoration(
         errorText: textError?.error,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        filled: true,
-        hintStyle: const TextStyle(color: Color.fromRGBO(66, 66, 66, 1)),
-        fillColor: AppColors.grey,
       ),
       onChanged: widget.onChanged,
       textInputAction: widget.fieldSettings.textInputAction,

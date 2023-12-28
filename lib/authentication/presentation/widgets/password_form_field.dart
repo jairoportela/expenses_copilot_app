@@ -1,5 +1,4 @@
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
-import 'package:expenses_copilot_app/config/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:form_inputs/form_inputs.dart';
 
@@ -49,12 +48,6 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
         obscureText: !showPassword,
         decoration: InputDecoration(
           errorText: textError?.error,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          filled: true,
-          hintStyle: const TextStyle(color: AppColors.grey800),
-          fillColor: AppColors.grey,
           suffixIcon: Padding(
             padding: const EdgeInsetsDirectional.only(end: 8.0),
             child: IconButton(

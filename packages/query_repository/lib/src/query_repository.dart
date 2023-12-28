@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
 abstract class QueryRepository {
   Future<List<R>> getAll<R>({required QueryHelper<R> queryHelper});
+  Future<R> getOne<R>({required QueryHelper<R> queryHelper});
   Future<bool> create({required CreateHelper createHelper});
   Future<R> createWithValue<R>(
       {required CreateHelperWithValue<R> createHelper});
@@ -35,12 +36,30 @@ class SupabaseQueryRepository extends QueryRepository {
     }
   }
 
+  @override
+  Future<R> getOne<R>({required QueryHelper<R> queryHelper}) async {
+    try {
+      final data = await _getQuery(queryHelper).limit(1).single();
+      return queryHelper.fromJson(data);
+    } on QueryError {
+      rethrow;
+    } catch (error) {
+      throw const QueryError(message: 'Un error ha ocurrido');
+    }
+  }
+
   supabase.PostgrestTransformBuilder<List<Map<String, dynamic>>?> _getQuery(
       QueryHelper queryHelper) {
     var query =
         _client.from(queryHelper.tableName).select(queryHelper.selectString);
     if (queryHelper.filter != null) {
       query = query.match(queryHelper.filter!);
+    }
+    if (queryHelper.inFilter != null) {
+      query = query.inFilter(
+        queryHelper.inFilter!.columnName,
+        queryHelper.inFilter!.dataToFilter,
+      );
     }
 
     supabase.PostgrestTransformBuilder<List<Map<String, dynamic>>?> queryOrder =
@@ -92,6 +111,6 @@ class SupabaseQueryRepository extends QueryRepository {
       {required SubscribeHelper subscribeHelper}) {
     return _client
         .from(subscribeHelper.tableName)
-        .stream(primaryKey: [subscribeHelper.primaryKey]);
+        .stream(primaryKey: subscribeHelper.primaryKey);
   }
 }

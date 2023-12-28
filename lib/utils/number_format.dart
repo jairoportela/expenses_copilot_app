@@ -8,4 +8,12 @@ extension NumberFormatExtension on double {
       customPattern: '\$###,###',
     ).format(this);
   }
+
+  String toCOPFormatWithSign([decimalDigits = 0]) {
+    return '${sign >= 0 ? '+ ' : '- '}${NumberFormat.currency(
+      locale: 'es',
+      decimalDigits: decimalDigits,
+      customPattern: '\$###,###',
+    ).format(abs())}';
+  }
 }

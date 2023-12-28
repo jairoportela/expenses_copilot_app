@@ -1,7 +1,19 @@
 import 'package:intl/intl.dart';
 
 extension DateFormatExtension on DateTime {
-  yMMMd() => DateFormat.yMMMd().format(this);
+  String yMMMd() => DateFormat.yMMMd('es_US').format(this);
+
+  String monthText() => DateFormat.MMMM('es_US').format(this);
+
+  String formatHoursTitle() {
+    final today = DateTime.now().toLocal();
+
+    return switch (today) {
+      DateTime(hour: var hour) when hour >= 17 => 'Buenas noches',
+      DateTime(hour: var hour) when hour > 12 && hour < 17 => 'Buenas tardes',
+      _ => 'Buenos días',
+    };
+  }
 
   get withoutHours => DateTime(year, month, day);
 

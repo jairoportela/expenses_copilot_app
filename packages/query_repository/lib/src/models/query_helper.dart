@@ -5,11 +5,13 @@ class QueryHelper<R> {
     required this.fromJson,
     this.filter,
     this.orderFilter,
+    this.inFilter,
   });
 
   final String tableName;
   final String selectString;
   final Map<String, dynamic>? filter;
+  final InFilter? inFilter;
   final OrderFilter? orderFilter;
   final R Function(Map<String, dynamic> json) fromJson;
 }
@@ -21,4 +23,13 @@ class OrderFilter {
   });
   final String columnName;
   final bool ascending;
+}
+
+class InFilter {
+  const InFilter({
+    required this.columnName,
+    required this.dataToFilter,
+  });
+  final String columnName;
+  final List<String> dataToFilter;
 }

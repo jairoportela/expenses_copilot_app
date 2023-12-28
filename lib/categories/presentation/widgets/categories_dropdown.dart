@@ -1,5 +1,7 @@
-import 'package:expenses_copilot_app/categories/data/models/expense_category.dart';
-import 'package:expenses_copilot_app/categories/providers/expenses_categories_overview/expenses_categories_overview_cubit.dart';
+import 'package:expenses_copilot_app/categories/data/models/models.dart';
+
+import 'package:expenses_copilot_app/categories/data/repositories/category_repository.dart';
+import 'package:expenses_copilot_app/categories/providers/categories_overview/categories_overview_cubit.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
 import 'package:expenses_copilot_app/common/widgets/number_icon.dart';
 import 'package:flutter/material.dart';
@@ -9,21 +11,23 @@ import 'package:gap/gap.dart';
 
 import 'package:query_repository/query_repository.dart';
 
-class ExpensesCategoriesDropdownBuilder extends StatelessWidget {
-  const ExpensesCategoriesDropdownBuilder({
-    super.key,
-    required this.onChanged,
-    required this.text,
-  });
+class CategoriesDropdownBuilder extends StatelessWidget {
+  const CategoriesDropdownBuilder(
+      {super.key,
+      required this.onChanged,
+      required this.text,
+      required this.type});
   final void Function(String? value)? onChanged;
   final TextInputValue text;
+  final CategoryType type;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => ExpensesCategoriesOverviewCubit(
-        repository: RepositoryProvider.of<QueryRepository>(context),
-      )..getData(),
-      child: ExpensesCategoriesDropdown(
+      create: (_) => CategoriesOverviewCubit(
+        repository: CategoryRepositoryImplementation(
+            dataSource: RepositoryProvider.of<QueryRepository>(context)),
+      )..getData(type: type),
+      child: CategoriesDropdown(
         onChanged: onChanged,
         text: text,
       ),
@@ -31,8 +35,8 @@ class ExpensesCategoriesDropdownBuilder extends StatelessWidget {
   }
 }
 
-class ExpensesCategoriesDropdown extends StatelessWidget {
-  const ExpensesCategoriesDropdown({
+class CategoriesDropdown extends StatelessWidget {
+  const CategoriesDropdown({
     super.key,
     required this.onChanged,
     required this.text,
@@ -41,18 +45,17 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
   final TextInputValue text;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ExpensesCategoriesOverviewCubit,
-        ExpensesCategoriesOverviewState>(
+    return BlocBuilder<CategoriesOverviewCubit, CategoriesOverviewState>(
       builder: (context, state) {
-        final List<ExpenseCategory> data = switch (state) {
-          ExpensesCategoriesOverviewSuccess() => state.data,
+        final List<Category> data = switch (state) {
+          CategoriesOverviewSuccess() => state.data,
           _ => [],
         };
         return StringDropdownFormField(
           text: text,
           onChanged: onChanged,
           selectedItemBuilder: (context) {
-            return data.map((ExpenseCategory item) {
+            return data.map((Category item) {
               return Container(
                 alignment: Alignment.centerLeft,
                 constraints: BoxConstraints(
@@ -69,7 +72,7 @@ class ExpensesCategoriesDropdown extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_forward_ios_rounded,
-            color: Colors.black,
+            color: Colors.white,
           ),
           items: [
             for (var category in data)
