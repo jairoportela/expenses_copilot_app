@@ -48,7 +48,7 @@ class CreateExpenseState extends Equatable {
         categoryId: TextInputValue.validated(expense.category.id),
         paymentMethodId: TextInputValue.validated(expense.paymentMethod.id),
         name: TextInputValue.unvalidated(expense.name),
-        value: NumberInputValue.unvalidated(expense.value.toString()),
+        value: NumberInputValue.unvalidated(expense.value.toStringAsFixed(0)),
         date: expense.date.withoutHours,
       );
 

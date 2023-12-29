@@ -45,11 +45,11 @@ class CreateExpenseScreen extends StatelessWidget {
           ),
         ),
         body: CreateExpenseForm(
-          isEditing: initialExpense != null,
+          isEditing: initialExpense?.toEditExpense != null,
         ),
         bottomNavigationBar: CustomBottomAppBar(
           child: CreateExpenseSubmitButton(
-            isEditing: initialExpense != null,
+            isEditing: initialExpense?.toEditExpense != null,
           ),
         ),
       ),

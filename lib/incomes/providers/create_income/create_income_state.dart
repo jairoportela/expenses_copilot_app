@@ -40,9 +40,16 @@ class CreateIncomeState extends Equatable {
     value: const NumberInputValue.unvalidated(),
     date: DateTime.now().withoutHours,
   );
+  factory CreateIncomeState.fromIncome(Income income) => CreateIncomeState(
+        status: const FormSubmitInitial(),
+        categoryId: TextInputValue.validated(income.category.id),
+        name: TextInputValue.validated(income.name),
+        value: NumberInputValue.validated(income.value.toStringAsFixed(0)),
+        date: DateTime.now().withoutHours,
+      );
 
-  Income toIncome() => Income(
-      id: '',
+  Income toIncome([String? id]) => Income(
+      id: id ?? '',
       name: name.value,
       date: date,
       category: Category(id: categoryId.value, name: '', icon: null),

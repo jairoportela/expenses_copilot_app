@@ -3,6 +3,7 @@ import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
 import 'package:expenses_copilot_app/categories/presentation/widgets/categories_dropdown.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
+import 'package:expenses_copilot_app/incomes/data/models/income.dart';
 import 'package:expenses_copilot_app/incomes/data/repository/income_repository.dart';
 import 'package:expenses_copilot_app/incomes/presentation/widgets/create_income_submit_button.dart';
 import 'package:expenses_copilot_app/incomes/providers/create_income/create_income_cubit.dart';
@@ -13,14 +14,22 @@ import 'package:form_inputs/form_inputs.dart';
 import 'package:gap/gap.dart';
 import 'package:query_repository/query_repository.dart';
 
+class CreateIncomeArguments {
+  const CreateIncomeArguments({
+    required this.toEditIncome,
+  });
+  final Income? toEditIncome;
+}
+
 class CreateIncomeScreen extends StatelessWidget {
   static const routeName = '/incomes/create';
-  const CreateIncomeScreen({super.key});
-
+  const CreateIncomeScreen({super.key, this.initialIncome});
+  final CreateIncomeArguments? initialIncome;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CreateIncomeCubit(
+        income: initialIncome?.toEditIncome,
         repository: IncomeRepositoryImplementation(
           dataSource: RepositoryProvider.of<QueryRepository>(context),
         ),
@@ -33,9 +42,13 @@ class CreateIncomeScreen extends StatelessWidget {
             icon: const Icon(Icons.close),
           ),
         ),
-        body: const CreateIncomeForm(),
-        bottomNavigationBar: const CustomBottomAppBar(
-          child: CreateIncomeSubmitButton(),
+        body: CreateIncomeForm(
+          isEditing: initialIncome?.toEditIncome != null,
+        ),
+        bottomNavigationBar: CustomBottomAppBar(
+          child: CreateIncomeSubmitButton(
+            isEditing: initialIncome?.toEditIncome != null,
+          ),
         ),
       ),
     );
@@ -43,7 +56,8 @@ class CreateIncomeScreen extends StatelessWidget {
 }
 
 class CreateIncomeForm extends StatelessWidget {
-  const CreateIncomeForm({super.key});
+  const CreateIncomeForm({super.key, required this.isEditing});
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
@@ -53,70 +67,23 @@ class CreateIncomeForm extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'Agrega un nuevo ingreso',
+            isEditing ? 'Edita el ingreso' : 'Agrega un nuevo ingreso',
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           const Gap(10),
-          const Text(
-              'Agrega los detalles del nuevo ingreso que te ayudara a mantener registro de tus finanzas'),
+          if (!isEditing)
+            const Text(
+                'Agrega los detalles del nuevo ingreso que te ayudara a mantener registro de tus finanzas'),
           const Gap(20),
-          BlocSelector<CreateIncomeCubit, CreateIncomeState, NumberInputValue>(
-            selector: (state) {
-              return state.value;
-            },
-            builder: (context, value) {
-              return CustomInputField(
-                isRequired: true,
-                title: 'Valor',
-                child: CustomNumberFormField(
-                  fieldSettings: const TextFieldSettings(
-                    textInputType: TextInputType.number,
-                  ),
-                  onChanged: context.read<CreateIncomeCubit>().onChangeValue,
-                  text: value,
-                ),
-              );
-            },
-          ),
+          const CreateIncomeValueInput(),
           const Gap(10),
-          BlocSelector<CreateIncomeCubit, CreateIncomeState, TextInputValue>(
-            selector: (state) {
-              return state.name;
-            },
-            builder: (context, value) {
-              return CustomInputField(
-                isRequired: true,
-                title: 'Descripción',
-                child: CustomTextFormField(
-                  onChanged: context.read<CreateIncomeCubit>().onChangeName,
-                  fieldSettings: const TextFieldSettings(
-                      textInputType: TextInputType.text),
-                  text: value,
-                ),
-              );
-            },
-          ),
+          const CreateIncomeDescriptionInput(),
           const Gap(10),
-          BlocSelector<CreateIncomeCubit, CreateIncomeState, TextInputValue>(
-            selector: (state) {
-              return state.categoryId;
-            },
-            builder: (context, value) {
-              return CustomInputField(
-                isRequired: true,
-                title: 'Categoría',
-                child: CategoriesDropdownBuilder(
-                  type: CategoryType.income,
-                  text: value,
-                  onChanged: context.read<CreateIncomeCubit>().onChangeCategory,
-                ),
-              );
-            },
-          ),
+          const CreateIncomeCategoryInput(),
           const Gap(10),
           const CustomInputField(
             title: 'Fecha',
-            child: CrateExpenseDateInput(),
+            child: CrateIncomeDateInput(),
           ),
         ],
       ),
@@ -124,16 +91,141 @@ class CreateIncomeForm extends StatelessWidget {
   }
 }
 
-class CrateExpenseDateInput extends StatefulWidget {
-  const CrateExpenseDateInput({
+class CreateIncomeCategoryInput extends StatelessWidget {
+  const CreateIncomeCategoryInput({
     super.key,
   });
 
   @override
-  State<CrateExpenseDateInput> createState() => _CrateExpenseDateInputState();
+  Widget build(BuildContext context) {
+    final id = context.read<CreateIncomeCubit>().state.categoryId.value;
+    return BlocSelector<CreateIncomeCubit, CreateIncomeState, TextInputValue>(
+      selector: (state) {
+        return state.categoryId;
+      },
+      builder: (context, value) {
+        return CustomInputField(
+          isRequired: true,
+          title: 'Categoría',
+          child: CategoriesDropdownBuilder(
+            initialId: id,
+            type: CategoryType.income,
+            text: value,
+            onChanged: context.read<CreateIncomeCubit>().onChangeCategory,
+          ),
+        );
+      },
+    );
+  }
 }
 
-class _CrateExpenseDateInputState extends State<CrateExpenseDateInput> {
+class CreateIncomeDescriptionInput extends StatefulWidget {
+  const CreateIncomeDescriptionInput({
+    super.key,
+  });
+
+  @override
+  State<CreateIncomeDescriptionInput> createState() =>
+      _CreateIncomeDescriptionInputState();
+}
+
+class _CreateIncomeDescriptionInputState
+    extends State<CreateIncomeDescriptionInput> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    _controller.text = context.read<CreateIncomeCubit>().state.name.value;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<CreateIncomeCubit, CreateIncomeState, TextInputValue>(
+      selector: (state) {
+        return state.name;
+      },
+      builder: (context, value) {
+        return CustomInputField(
+          isRequired: true,
+          title: 'Descripción',
+          child: CustomTextFormField(
+            controller: _controller,
+            onChanged: context.read<CreateIncomeCubit>().onChangeName,
+            fieldSettings:
+                const TextFieldSettings(textInputType: TextInputType.text),
+            text: value,
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+class CreateIncomeValueInput extends StatefulWidget {
+  const CreateIncomeValueInput({
+    super.key,
+  });
+
+  @override
+  State<CreateIncomeValueInput> createState() => _CreateIncomeValueInputState();
+}
+
+class _CreateIncomeValueInputState extends State<CreateIncomeValueInput> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    _controller.text = context.read<CreateIncomeCubit>().state.value.value;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<CreateIncomeCubit, CreateIncomeState, NumberInputValue>(
+      selector: (state) {
+        return state.value;
+      },
+      builder: (context, value) {
+        return CustomInputField(
+          isRequired: true,
+          title: 'Valor',
+          child: CustomNumberFormField(
+            controller: _controller,
+            fieldSettings: const TextFieldSettings(
+              textInputType: TextInputType.number,
+            ),
+            onChanged: context.read<CreateIncomeCubit>().onChangeValue,
+            text: value,
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+}
+
+class CrateIncomeDateInput extends StatefulWidget {
+  const CrateIncomeDateInput({
+    super.key,
+  });
+
+  @override
+  State<CrateIncomeDateInput> createState() => _CrateIncomeDateInputState();
+}
+
+class _CrateIncomeDateInputState extends State<CrateIncomeDateInput> {
   final TextEditingController _controller = TextEditingController();
 
   @override

@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 
 class CreateIncomeSubmitButton extends StatelessWidget {
-  const CreateIncomeSubmitButton({super.key});
-
+  const CreateIncomeSubmitButton({super.key, required this.isEditing});
+  final bool isEditing;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateIncomeCubit, CreateIncomeState>(
@@ -14,13 +14,13 @@ class CreateIncomeSubmitButton extends StatelessWidget {
         if (status is FormSubmitSuccess) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(const SnackBar(
+            ..showSnackBar(SnackBar(
               content: Text(
-                'Ingreso creado con exito ✅',
+                'Ingreso ${isEditing ? "editado" : "creado"} con exito ✅',
               ),
             ));
 
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         }
         if (status is FormSubmitError) {
           ScaffoldMessenger.of(context)
@@ -42,8 +42,10 @@ class CreateIncomeSubmitButton extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         return FilledButton(
-          onPressed: context.read<CreateIncomeCubit>().onSubmit,
-          child: const Text('Agregar ingreso'),
+          onPressed: isEditing
+              ? context.read<CreateIncomeCubit>().onEditingSubmit
+              : context.read<CreateIncomeCubit>().onSubmit,
+          child: Text('${isEditing ? "Editar" : "Agregar"} ingreso'),
         );
       },
     );

@@ -4,6 +4,7 @@ import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
 import 'package:expenses_copilot_app/common/widgets/number_icon.dart';
 import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
+import 'package:expenses_copilot_app/incomes/data/models/income.dart';
 import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_screen.dart';
 import 'package:expenses_copilot_app/payment_methods/data/models/payment_method.dart';
 import 'package:expenses_copilot_app/transactions/data/models/transaction.dart';
@@ -35,6 +36,13 @@ class TransactionDetailScreen extends StatelessWidget {
   });
   final TransactionDetailArguments arguments;
 
+  reloadData(BuildContext context) {
+    context.read<TransactionDetailCubit>().getTransaction(
+          arguments.id,
+          arguments.type,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -64,16 +72,17 @@ class TransactionDetailScreen extends StatelessWidget {
                         ),
                       )
                           .then((value) {
-                        if (value == true) {
-                          context.read<TransactionDetailCubit>().getTransaction(
-                                id,
-                                type,
-                              );
-                        }
+                        if (value == true) reloadData(context);
                       });
                     } else {
                       Navigator.of(context)
-                          .pushNamed(CreateIncomeScreen.routeName);
+                          .pushNamed(CreateIncomeScreen.routeName,
+                              arguments: CreateIncomeArguments(
+                                toEditIncome: transaction as Income,
+                              ))
+                          .then((value) {
+                        if (value == true) reloadData(context);
+                      });
                     }
                   },
                   icon: const Icon(Icons.edit),

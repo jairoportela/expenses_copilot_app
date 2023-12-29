@@ -31,8 +31,9 @@ class RouteGenerator {
           builder: (_) => CreateExpenseScreen(initialExpense: data),
         );
       case CreateIncomeScreen.routeName:
+        final data = settings.arguments as CreateIncomeArguments?;
         return MaterialPageRoute<void>(
-          builder: (_) => const CreateIncomeScreen(),
+          builder: (_) => CreateIncomeScreen(initialIncome: data),
         );
       case AllTransactionsScreen.routeName:
         return MaterialPageRoute<void>(
