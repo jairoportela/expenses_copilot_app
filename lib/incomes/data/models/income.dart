@@ -1,18 +1,15 @@
 import 'package:expenses_copilot_app/categories/data/models/category.dart';
+import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
+import 'package:expenses_copilot_app/transactions/data/models/transaction.dart';
 
-class Income {
+class Income extends Transaction {
   const Income({
-    required this.id,
-    required this.name,
-    required this.date,
-    required this.category,
-    required this.value,
-  });
-  final String id;
-  final String name;
-  final DateTime date;
-  final Category category;
-  final double value;
+    required super.id,
+    required super.name,
+    required super.date,
+    required super.category,
+    required super.value,
+  }) : super(type: CategoryType.income);
 
   factory Income.fromJson(Map<String, dynamic> json) {
     return Income(

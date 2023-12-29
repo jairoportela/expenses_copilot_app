@@ -2,8 +2,13 @@ import 'package:expenses_copilot_app/authentication/presentation/screens/login_s
 import 'package:expenses_copilot_app/expenses/presentation/screens/create_expense_screen.dart';
 import 'package:expenses_copilot_app/home/presentation/screens/home_screen.dart';
 import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_screen.dart';
+import 'package:expenses_copilot_app/transactions/data/repository/transaction_repository.dart';
 import 'package:expenses_copilot_app/transactions/presentation/screens/all_transactions_screen.dart';
+import 'package:expenses_copilot_app/transactions/presentation/screens/transaction_detail_screen.dart';
+import 'package:expenses_copilot_app/transactions/providers/transaction_detail/transaction_detail_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:query_repository/query_repository.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -21,8 +26,9 @@ class RouteGenerator {
           builder: (_) => const LoginScreen(),
         );
       case CreateExpenseScreen.routeName:
-        return MaterialPageRoute<void>(
-          builder: (_) => const CreateExpenseScreen(),
+        final data = settings.arguments as CreateExpenseArguments?;
+        return MaterialPageRoute<bool?>(
+          builder: (_) => CreateExpenseScreen(initialExpense: data),
         );
       case CreateIncomeScreen.routeName:
         return MaterialPageRoute<void>(
@@ -31,6 +37,20 @@ class RouteGenerator {
       case AllTransactionsScreen.routeName:
         return MaterialPageRoute<void>(
           builder: (_) => const AllTransactionsScreen(),
+        );
+      case TransactionDetailScreen.routeName:
+        final data = settings.arguments as TransactionDetailArguments;
+        return MaterialPageRoute<void>(
+          builder: (context) => BlocProvider(
+            create: (ctx) => TransactionDetailCubit(
+              repository: TransactionRepositoryImplementation(
+                dataSource: RepositoryProvider.of<QueryRepository>(context),
+              ),
+            )..getTransaction(data.id, data.type),
+            child: TransactionDetailScreen(
+              arguments: data,
+            ),
+          ),
         );
 
       default:

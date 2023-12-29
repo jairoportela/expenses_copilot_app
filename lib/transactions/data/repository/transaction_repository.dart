@@ -1,4 +1,6 @@
 import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
+import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
+import 'package:expenses_copilot_app/incomes/data/models/income.dart';
 import 'package:expenses_copilot_app/transactions/data/models/transaction.dart';
 import 'package:query_repository/query_repository.dart';
 
@@ -7,6 +9,11 @@ abstract class TransactionRepository {
     CategoryType? type,
   );
   Stream<List<Transaction>> getRecents();
+
+  Future<Transaction> getOne({
+    required CategoryType categoryType,
+    required String id,
+  });
 }
 
 class TransactionRepositoryImplementation extends TransactionRepository {
@@ -74,5 +81,28 @@ class TransactionRepositoryImplementation extends TransactionRepository {
       );
       return data;
     });
+  }
+
+  @override
+  Future<Transaction> getOne(
+      {required CategoryType categoryType, required String id}) async {
+    return await switch (categoryType) {
+      CategoryType.expense => _dataSource.getOne<Expense>(
+          queryHelper: QueryHelper(
+              tableName: 'expenses',
+              selectString:
+                  '''*,categories(id,name,icon),payment_methods(id,name,icon)''',
+              fromJson: Expense.fromJson,
+              filter: {'id': id}),
+        ),
+      CategoryType.income => _dataSource.getOne<Income>(
+          queryHelper: QueryHelper(
+            tableName: 'incomes',
+            selectString: '''*,categories(id,name,icon)''',
+            fromJson: Income.fromJson,
+            filter: {'id': id},
+          ),
+        ),
+    };
   }
 }

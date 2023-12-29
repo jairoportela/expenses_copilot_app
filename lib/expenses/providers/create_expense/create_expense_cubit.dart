@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
 import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
 import 'package:expenses_copilot_app/utils/date_format.dart';
 
@@ -9,13 +10,21 @@ import 'package:query_repository/query_repository.dart';
 part 'create_expense_state.dart';
 
 class CreateExpenseCubit extends Cubit<CreateExpenseState> {
-  CreateExpenseCubit(
-      {required ExpensesRepository repository, required String userId})
-      : _repository = repository,
+  CreateExpenseCubit({
+    required ExpensesRepository repository,
+    required String userId,
+    Expense? expense,
+  })  : _repository = repository,
         _userId = userId,
-        super(CreateExpenseState.empty);
+        _editingExpenseId = expense?.id,
+        super(
+          expense == null
+              ? CreateExpenseState.empty
+              : CreateExpenseState.fromExpense(expense),
+        );
   final ExpensesRepository _repository;
   final String _userId;
+  final String? _editingExpenseId;
 
   void onChangeCategory(String? value) => emit(state.copyWith(
           categoryId: TextInputValue.validated(
@@ -74,6 +83,33 @@ class CreateExpenseCubit extends Cubit<CreateExpenseState> {
 
       emit(state.copyWith(status: const FormSubmitLoading()));
       await _repository.create(data: state.toJson(), userId: _userId);
+      emit(state.copyWith(status: const FormSubmitSuccess()));
+    } on CreateError catch (error) {
+      emit(state.copyWith(status: FormSubmitError(error.message)));
+    } catch (error) {
+      emit(state.copyWith(status: FormSubmitError(error.toString())));
+    }
+  }
+
+  void onEditingSubmit() async {
+    try {
+      final finalState = state.copyWith(
+        categoryId: TextInputValue.validated(state.categoryId.value),
+        paymentMethodId: TextInputValue.validated(state.paymentMethodId.value),
+        value: NumberInputValue.validated(state.value.value),
+        name: TextInputValue.validated(state.name.value),
+        date: state.date,
+      );
+      emit(finalState);
+
+      if (finalState.isNotValid) return;
+
+      emit(state.copyWith(status: const FormSubmitLoading()));
+      await _repository.edit(
+        data: state.toJson(),
+        userId: _userId,
+        id: _editingExpenseId!,
+      );
       emit(state.copyWith(status: const FormSubmitSuccess()));
     } on CreateError catch (error) {
       emit(state.copyWith(status: FormSubmitError(error.message)));

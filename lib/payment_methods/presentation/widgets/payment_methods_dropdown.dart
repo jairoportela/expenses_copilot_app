@@ -11,9 +11,11 @@ class PaymentMethodsDropdownBuilder extends StatelessWidget {
     super.key,
     required this.onChanged,
     required this.text,
+    this.initialId,
   });
   final void Function(String? value)? onChanged;
   final TextInputValue text;
+  final String? initialId;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class PaymentMethodsDropdownBuilder extends StatelessWidget {
       child: PaymentMethodsDropdown(
         onChanged: onChanged,
         text: text,
+        initialId: initialId,
       ),
     );
   }
@@ -34,9 +37,11 @@ class PaymentMethodsDropdown extends StatelessWidget {
     super.key,
     required this.onChanged,
     required this.text,
+    required this.initialId,
   });
   final void Function(String? value)? onChanged;
   final TextInputValue text;
+  final String? initialId;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PaymentMethodsOverviewCubit,
@@ -46,7 +51,14 @@ class PaymentMethodsDropdown extends StatelessWidget {
           PaymentMethodsOverviewSuccess() => state.data,
           _ => [],
         };
+
+        String? id;
+        try {
+          id = data.firstWhere((value) => value.id == initialId).id;
+        } catch (_) {}
+
         return StringDropdownFormField(
+          initialValue: id,
           text: text,
           onChanged: onChanged,
           selectedItemBuilder: (context) {

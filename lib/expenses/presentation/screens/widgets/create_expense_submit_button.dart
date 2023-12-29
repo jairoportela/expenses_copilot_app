@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 
 class CreateExpenseSubmitButton extends StatelessWidget {
-  const CreateExpenseSubmitButton({super.key});
+  const CreateExpenseSubmitButton({super.key, required this.isEditing});
+  final bool isEditing;
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,15 @@ class CreateExpenseSubmitButton extends StatelessWidget {
         if (status is FormSubmitSuccess) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(const SnackBar(
+            ..showSnackBar(SnackBar(
               content: Text(
-                'Gasto creado con exito ✅',
+                isEditing
+                    ? 'Gasto editado con exito ✅'
+                    : 'Gasto creado con exito ✅',
               ),
             ));
 
-          Navigator.of(context).pop();
+          Navigator.of(context).pop(true);
         }
         if (status is FormSubmitError) {
           ScaffoldMessenger.of(context)
@@ -42,8 +45,10 @@ class CreateExpenseSubmitButton extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         return FilledButton(
-          onPressed: context.read<CreateExpenseCubit>().onSubmit,
-          child: const Text('Agregar gasto'),
+          onPressed: isEditing
+              ? context.read<CreateExpenseCubit>().onEditingSubmit
+              : context.read<CreateExpenseCubit>().onSubmit,
+          child: Text('${isEditing ? "Editar" : "Agregar"} gasto'),
         );
       },
     );

@@ -1,4 +1,5 @@
 import 'package:query_repository/src/models/create_helper.dart';
+import 'package:query_repository/src/models/edit_helper.dart';
 import 'package:query_repository/src/models/exceptions.dart';
 import 'package:query_repository/src/models/query_helper.dart';
 import 'package:query_repository/src/models/subscribe_helper.dart';
@@ -8,6 +9,7 @@ abstract class QueryRepository {
   Future<List<R>> getAll<R>({required QueryHelper<R> queryHelper});
   Future<R> getOne<R>({required QueryHelper<R> queryHelper});
   Future<bool> create({required CreateHelper createHelper});
+  Future<bool> edit({required EditHelper editHelper});
   Future<R> createWithValue<R>(
       {required CreateHelperWithValue<R> createHelper});
   supabase.SupabaseStreamFilterBuilder subscribe(
@@ -78,6 +80,22 @@ class SupabaseQueryRepository extends QueryRepository {
   Future<bool> create({required CreateHelper createHelper}) async {
     try {
       await _client.from(createHelper.tableName).insert(createHelper.data);
+      return true;
+    } on CreateError {
+      rethrow;
+    } catch (error) {
+      throw const CreateError(
+          message: 'Un error ha ocurrido al crear un elemento');
+    }
+  }
+
+  @override
+  Future<bool> edit({required EditHelper editHelper}) async {
+    try {
+      await _client
+          .from(editHelper.tableName)
+          .update(editHelper.data)
+          .eq(editHelper.columnName, editHelper.value);
       return true;
     } on CreateError {
       rethrow;

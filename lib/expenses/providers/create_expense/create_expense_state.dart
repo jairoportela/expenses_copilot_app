@@ -43,6 +43,14 @@ class CreateExpenseState extends Equatable {
     value: const NumberInputValue.unvalidated(),
     date: DateTime.now().withoutHours,
   );
+  factory CreateExpenseState.fromExpense(Expense expense) => CreateExpenseState(
+        status: const FormSubmitInitial(),
+        categoryId: TextInputValue.validated(expense.category.id),
+        paymentMethodId: TextInputValue.validated(expense.paymentMethod.id),
+        name: TextInputValue.unvalidated(expense.name),
+        value: NumberInputValue.unvalidated(expense.value.toString()),
+        date: expense.date.withoutHours,
+      );
 
   Map<String, dynamic> toJson() => {
         'name': name.value,

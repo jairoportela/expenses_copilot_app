@@ -105,6 +105,7 @@ class StringDropdownFormField extends StatelessWidget {
     this.selectedItemBuilder,
     this.focusNode,
     this.icon,
+    this.initialValue,
   });
 
   final TextInputValue text;
@@ -114,10 +115,12 @@ class StringDropdownFormField extends StatelessWidget {
   final List<Widget> Function(BuildContext)? selectedItemBuilder;
   final List<DropdownMenuItem<String>>? items;
   final Widget? icon;
+  final String? initialValue;
   @override
   Widget build(BuildContext context) {
     final textError = text.displayError;
     return DropdownButtonFormField<String>(
+      value: initialValue,
       focusNode: focusNode,
       decoration: InputDecoration(
         errorText: textError?.message,

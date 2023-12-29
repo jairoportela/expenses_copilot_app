@@ -55,7 +55,7 @@ class ListTransactionsBuilder extends StatelessWidget {
               pinned: true,
             ),
             SliverPadding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               sliver: SliverToBoxAdapter(
                 child: TransactionFilterRow(
                   onSelected: (TransactionTypeFilter value) {
@@ -82,7 +82,8 @@ class ListTransactionsBuilder extends StatelessWidget {
               ),
             for (var key in groupExpenses.keys) ...[
               SliverPadding(
-                padding: const EdgeInsets.all(20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     key,
@@ -91,7 +92,7 @@ class ListTransactionsBuilder extends StatelessWidget {
                 ),
               ),
               SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 sliver: SliverList.builder(
                   itemBuilder: (context, index) {
                     final item = groupExpenses[key]![index];
