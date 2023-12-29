@@ -1,10 +1,14 @@
 enum CategoryType {
-  expense('expense'),
-  income('income');
+  expense('expense', 'gasto'),
+  income('income', 'ingreso');
 
-  const CategoryType(this.name);
+  const CategoryType(
+    this.name,
+    this.title,
+  );
 
   final String name;
+  final String title;
 }
 
 CategoryType getCategoryByKey(String? key) {

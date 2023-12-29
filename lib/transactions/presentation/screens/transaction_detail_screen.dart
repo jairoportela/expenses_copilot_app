@@ -93,37 +93,73 @@ class TransactionDetailScreen extends StatelessWidget {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            BlocSelector<TransactionDetailCubit, TransactionDetailState,
-                Transaction?>(
-              selector: (state) {
-                return state.data;
-              },
-              builder: (context, transaction) {
-                double? value;
-                if (transaction != null) {
-                  Transaction(:value) = transaction;
-                  if (type == CategoryType.expense) value *= -1;
-                }
+      body: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              BlocSelector<TransactionDetailCubit, TransactionDetailState,
+                  Transaction?>(
+                selector: (state) {
+                  return state.data;
+                },
+                builder: (context, transaction) {
+                  double? value;
+                  if (transaction != null) {
+                    Transaction(:value) = transaction;
+                    if (type == CategoryType.expense) value *= -1;
+                  }
 
-                return TransactionTitleCard(
-                  color: color,
-                  title: transaction?.name ?? title,
-                  id: id,
-                  iconData: transaction?.category.icon ?? iconData,
-                  value: value,
-                );
-              },
-            ),
-            const Gap(5),
-            const TransactionInfoColumn(),
-          ],
+                  return TransactionTitleCard(
+                    color: color,
+                    title: transaction?.name ?? title,
+                    id: id,
+                    iconData: transaction?.category.icon ?? iconData,
+                    value: value,
+                  );
+                },
+              ),
+              const Gap(5),
+              const TransactionInfoColumn(),
+              const Spacer(),
+              DeleteTransactionButton(type: type)
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class DeleteTransactionButton extends StatelessWidget {
+  const DeleteTransactionButton({
+    super.key,
+    required this.type,
+  });
+
+  final CategoryType type;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<TransactionDetailCubit, TransactionDetailState, bool>(
+      selector: (state) {
+        return state.data != null;
+      },
+      builder: (context, isLoaded) {
+        return isLoaded
+            ? FilledButton.icon(
+                style: FilledButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(164, 255, 82, 82),
+                    fixedSize: const Size(0, 50),
+                    foregroundColor: Colors.white),
+                onPressed: () {},
+                icon: const Icon(Icons.delete),
+                label: Text('Eliminar ${type.title}'),
+              )
+            : const SizedBox();
+      },
     );
   }
 }
