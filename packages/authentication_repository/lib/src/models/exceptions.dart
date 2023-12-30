@@ -7,6 +7,8 @@ class AuthError implements Exception {
   final String message;
 }
 
+class EmailAlreadyRegisteredException implements Exception {}
+
 class SignUpWithEmailAndPasswordFailure extends AuthError {
   /// {@macro sign_up_with_email_and_password_failure}
   const SignUpWithEmailAndPasswordFailure([

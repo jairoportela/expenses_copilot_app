@@ -31,6 +31,7 @@ class _EmailFormFieldState extends State<EmailFormField> {
   @override
   Widget build(BuildContext context) {
     final textError = widget.text.displayError;
+
     return TextField(
       focusNode: widget.focusNode,
       controller: _controller,

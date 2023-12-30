@@ -1,8 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:expenses_copilot_app/categories/data/models/models.dart';
 import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
 import 'package:expenses_copilot_app/expenses/data/repository/expenses_repository.dart';
+import 'package:expenses_copilot_app/payment_methods/data/models/payment_method.dart';
 import 'package:expenses_copilot_app/utils/date_format.dart';
+import 'package:expenses_copilot_app/utils/number_format.dart';
 
 import 'package:form_inputs/form_inputs.dart';
 import 'package:query_repository/query_repository.dart';
@@ -40,7 +43,7 @@ class CreateExpenseCubit extends Cubit<CreateExpenseState> {
 
   void onChangeName(String value) {
     final previousValue = state.name;
-    final shouldValidate = previousValue.isNotValid;
+    final shouldValidate = previousValue.isPure;
     final newState = state.copyWith(
       name: shouldValidate
           ? TextInputValue.unvalidated(
@@ -55,7 +58,7 @@ class CreateExpenseCubit extends Cubit<CreateExpenseState> {
 
   void onChangeValue(String value) {
     final previousValue = state.value;
-    final shouldValidate = previousValue.isNotValid;
+    final shouldValidate = previousValue.isPure;
     final newState = state.copyWith(
       value: shouldValidate
           ? NumberInputValue.unvalidated(
@@ -82,7 +85,7 @@ class CreateExpenseCubit extends Cubit<CreateExpenseState> {
       if (finalState.isNotValid) return;
 
       emit(state.copyWith(status: const FormSubmitLoading()));
-      await _repository.create(data: state.toJson(), userId: _userId);
+      await _repository.create(data: state.toExpense(), userId: _userId);
       emit(state.copyWith(status: const FormSubmitSuccess()));
     } on CreateError catch (error) {
       emit(state.copyWith(status: FormSubmitError(error.message)));
@@ -106,7 +109,7 @@ class CreateExpenseCubit extends Cubit<CreateExpenseState> {
 
       emit(state.copyWith(status: const FormSubmitLoading()));
       await _repository.edit(
-        data: state.toJson(),
+        data: state.toExpense(),
         userId: _userId,
         id: _editingExpenseId!,
       );

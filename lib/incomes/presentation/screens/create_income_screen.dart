@@ -196,7 +196,7 @@ class _CreateIncomeValueInputState extends State<CreateIncomeValueInput> {
         return CustomInputField(
           isRequired: true,
           title: 'Valor',
-          child: CustomNumberFormField(
+          child: CustomCurrencyFormField(
             controller: _controller,
             fieldSettings: const TextFieldSettings(
               textInputType: TextInputType.number,

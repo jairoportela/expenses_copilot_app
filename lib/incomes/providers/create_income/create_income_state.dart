@@ -44,7 +44,7 @@ class CreateIncomeState extends Equatable {
         status: const FormSubmitInitial(),
         categoryId: TextInputValue.validated(income.category.id),
         name: TextInputValue.validated(income.name),
-        value: NumberInputValue.validated(income.value.toStringAsFixed(0)),
+        value: NumberInputValue.validated(income.value.decimalFormat()),
         date: DateTime.now().withoutHours,
       );
 

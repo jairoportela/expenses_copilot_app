@@ -48,17 +48,20 @@ class CreateExpenseState extends Equatable {
         categoryId: TextInputValue.validated(expense.category.id),
         paymentMethodId: TextInputValue.validated(expense.paymentMethod.id),
         name: TextInputValue.unvalidated(expense.name),
-        value: NumberInputValue.unvalidated(expense.value.toStringAsFixed(0)),
+        value: NumberInputValue.unvalidated(expense.value.decimalFormat()),
         date: expense.date.withoutHours,
       );
 
-  Map<String, dynamic> toJson() => {
-        'name': name.value,
-        'value': double.tryParse(value.value) ?? 0,
-        'category_id': categoryId.value,
-        'payment_id': paymentMethodId.value,
-        'date': date.toUtc().toIso8601String(),
-      };
+  Expense toExpense([String? id]) => Expense(
+        id: id ?? '',
+        name: name.value,
+        date: date,
+        category: Category(id: categoryId.value, name: '', icon: null),
+        value: double.tryParse(value.value) ?? 0,
+        paymentMethod:
+            PaymentMethod(icon: null, name: '', id: paymentMethodId.value),
+        createdAt: DateTime.now(),
+      );
 
   bool get isNotValid =>
       categoryId.isNotValid ||

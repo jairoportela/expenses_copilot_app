@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:expenses_copilot_app/authentication/presentation/screens/sign_up_screen.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/common/widgets/form_inputs.dart';
 import 'package:expenses_copilot_app/authentication/providers/login_cubit/login_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
+import 'package:gap/gap.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = '/login';
@@ -32,8 +34,18 @@ class LoginScreen extends StatelessWidget {
                 'Inicio de sesión',
                 style: Theme.of(context).textTheme.displaySmall,
               ),
-              const SizedBox(height: 20),
+              const Gap(20),
               const SignInForm(),
+              const Gap(30),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushReplacementNamed(SignUpScreen.routeName);
+                },
+                child: const Text(
+                  'No tienes una cuenta, crea una aquí',
+                ),
+              ),
             ],
           ),
         ),

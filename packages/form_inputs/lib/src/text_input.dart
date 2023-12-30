@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
 enum TextInputError {
@@ -11,7 +12,8 @@ enum TextInputError {
 }
 
 // Extend FormzInput and provide the input type and error type.
-class TextInputValue extends FormzInput<String, TextInputError> {
+class TextInputValue extends FormzInput<String, TextInputError>
+    with EquatableMixin {
   const TextInputValue.unvalidated([String value = '']) : super.pure(value);
 
   const TextInputValue.validated([String value = '']) : super.dirty(value);
@@ -21,4 +23,10 @@ class TextInputValue extends FormzInput<String, TextInputError> {
   TextInputError? validator(String value) {
     return value.isEmpty ? TextInputError.empty : null;
   }
+
+  @override
+  List<Object?> get props => [
+        value,
+        isPure,
+      ];
 }

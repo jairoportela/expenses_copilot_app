@@ -28,4 +28,12 @@ class Expense extends Transaction {
       createdAt: createdAt,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'value': value,
+        'category_id': category.id,
+        'payment_id': paymentMethod.id,
+        'date': date.toUtc().toIso8601String(),
+      };
 }

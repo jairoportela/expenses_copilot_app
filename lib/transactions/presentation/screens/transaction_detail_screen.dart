@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
 import 'package:expenses_copilot_app/common/widgets/number_icon.dart';
 import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
@@ -171,7 +169,6 @@ class TransactionInfoColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TransactionDetailCubit, TransactionDetailState>(
       builder: (context, state) {
-        log(state.toString(), name: 'TransactionDetailCubit');
         if (state.status == TransactionDetailStatus.loading ||
             state.status == TransactionDetailStatus.initial) {
           return const Padding(

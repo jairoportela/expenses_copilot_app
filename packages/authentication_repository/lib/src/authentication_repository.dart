@@ -12,6 +12,7 @@ abstract class AuthenticationRepository {
   Future<bool> signUp({
     required String email,
     required String password,
+    required String username,
   });
 
   Future<void> signOut();
@@ -51,11 +52,20 @@ class SupabaseAuthenticationRepository extends AuthenticationRepository {
   ///
   /// Throws a [SignUpWithEmailAndPasswordFailure] if an exception occurs.
   @override
-  Future<bool> signUp({required String email, required String password}) async {
+  Future<bool> signUp({
+    required String email,
+    required String password,
+    required String username,
+  }) async {
     try {
-      await _supabase.auth.signUp(email: email, password: password);
+      await _supabase.auth.signUp(email: email, password: password, data: {
+        'name': username,
+      });
       return true;
     } on supabase.AuthException catch (e) {
+      if (e.message == 'User already registered') {
+        throw EmailAlreadyRegisteredException();
+      }
       throw SignUpWithEmailAndPasswordFailure.fromException(e);
     } catch (_) {
       throw const SignUpWithEmailAndPasswordFailure();

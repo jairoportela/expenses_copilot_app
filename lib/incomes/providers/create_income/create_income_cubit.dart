@@ -4,6 +4,7 @@ import 'package:expenses_copilot_app/categories/data/models/category.dart';
 import 'package:expenses_copilot_app/incomes/data/models/income.dart';
 import 'package:expenses_copilot_app/incomes/data/repository/income_repository.dart';
 import 'package:expenses_copilot_app/utils/date_format.dart';
+import 'package:expenses_copilot_app/utils/number_format.dart';
 
 import 'package:form_inputs/form_inputs.dart';
 import 'package:query_repository/query_repository.dart';
@@ -36,7 +37,7 @@ class CreateIncomeCubit extends Cubit<CreateIncomeState> {
 
   void onChangeName(String value) {
     final previousValue = state.name;
-    final shouldValidate = previousValue.isNotValid;
+    final shouldValidate = previousValue.isPure;
     final newState = state.copyWith(
       name: shouldValidate
           ? TextInputValue.unvalidated(
@@ -51,7 +52,7 @@ class CreateIncomeCubit extends Cubit<CreateIncomeState> {
 
   void onChangeValue(String value) {
     final previousValue = state.value;
-    final shouldValidate = previousValue.isNotValid;
+    final shouldValidate = previousValue.isPure;
     final newState = state.copyWith(
       value: shouldValidate
           ? NumberInputValue.unvalidated(

@@ -12,7 +12,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   void onChangeEmail(String value) {
     final previousEmail = state.email;
-    final shouldValidate = previousEmail.isNotValid;
+    final shouldValidate = previousEmail.isPure;
     final newState = state.copyWith(
       email: shouldValidate
           ? Email.unvalidated(
@@ -26,21 +26,18 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void onChangeFocusEmail() {
-    final previousEmailState = state.email;
-    final previousEmailValue = previousEmailState.value;
+    final newState = state.copyWith(
+      email: Email.validated(
+        state.email.value,
+      ),
+    );
 
-    final newEmailState = Email.validated(
-      previousEmailValue,
-    );
-    final newScreenState = state.copyWith(
-      email: newEmailState,
-    );
-    emit(newScreenState);
+    emit(newState);
   }
 
   void onChangePassword(String value) {
     final previousPassword = state.password;
-    final shouldValidate = previousPassword.isNotValid;
+    final shouldValidate = previousPassword.isPure;
     final newState = state.copyWith(
       password: shouldValidate
           ? Password.unvalidated(
@@ -54,16 +51,13 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void onChangeFocusPassword() {
-    final previousPasswordState = state.password;
-    final previousPasswordValue = previousPasswordState.value;
+    final newState = state.copyWith(
+      password: Password.validated(
+        state.password.value,
+      ),
+    );
 
-    final newPasswordState = Password.validated(
-      previousPasswordValue,
-    );
-    final newScreenState = state.copyWith(
-      password: newPasswordState,
-    );
-    emit(newScreenState);
+    emit(newState);
   }
 
   void onSubmit() async {

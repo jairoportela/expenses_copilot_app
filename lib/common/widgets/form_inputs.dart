@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_inputs/form_inputs.dart';
+import 'package:intl/intl.dart';
+import 'package:pattern_formatter/numeric_formatter.dart';
 
 class CustomInputField extends StatelessWidget {
   const CustomInputField({
@@ -61,8 +63,8 @@ class CustomTextFormField extends StatelessWidget {
   }
 }
 
-class CustomNumberFormField extends StatelessWidget {
-  const CustomNumberFormField({
+class CustomCurrencyFormField extends StatelessWidget {
+  const CustomCurrencyFormField({
     super.key,
     required this.fieldSettings,
     required this.text,
@@ -83,7 +85,10 @@ class CustomNumberFormField extends StatelessWidget {
         focusNode: focusNode,
         controller: controller,
         inputFormatters: [
-          FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+          ThousandsFormatter(
+            formatter: NumberFormat.decimalPattern('es'),
+            allowFraction: true,
+          ),
         ],
         decoration: InputDecoration(
           errorText: textError?.message,
