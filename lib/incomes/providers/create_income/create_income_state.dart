@@ -49,11 +49,13 @@ class CreateIncomeState extends Equatable {
       );
 
   Income toIncome([String? id]) => Income(
-      id: id ?? '',
-      name: name.value,
-      date: date,
-      category: Category(id: categoryId.value, name: '', icon: null),
-      value: double.tryParse(value.value) ?? 0);
+        id: id ?? '',
+        name: name.value,
+        date: date,
+        category: Category(id: categoryId.value, name: '', icon: null),
+        value: double.tryParse(value.value) ?? 0,
+        createdAt: DateTime.now(),
+      );
 
   bool get isNotValid =>
       categoryId.isNotValid || value.isNotValid || name.isNotValid;

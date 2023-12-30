@@ -19,7 +19,9 @@ class CategoryRepositoryImplementation extends CategoryRepository {
           tableName: _tableName,
           selectString: '*',
           fromJson: Category.fromJson,
-          orderFilter: const OrderFilter(ascending: true, columnName: 'name'),
+          orderFilter: [
+            const OrderFilter(ascending: true, columnName: 'name')
+          ],
           filter: {
             'type': type.name,
           }),

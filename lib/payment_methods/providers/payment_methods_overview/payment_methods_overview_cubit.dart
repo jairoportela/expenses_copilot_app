@@ -19,7 +19,7 @@ class PaymentMethodsOverviewCubit extends Cubit<PaymentMethodsOverviewState> {
           tableName: 'payment_methods',
           selectString: '*',
           fromJson: PaymentMethod.fromJson,
-          orderFilter: OrderFilter(ascending: true, columnName: 'name'),
+          orderFilter: [OrderFilter(ascending: true, columnName: 'name')],
         ),
       );
       emit(PaymentMethodsOverviewSuccess(data));

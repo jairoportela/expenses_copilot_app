@@ -9,6 +9,7 @@ class Transaction {
     required this.category,
     required this.value,
     required this.type,
+    required this.createdAt,
   });
   final String id;
   final String name;
@@ -16,14 +17,17 @@ class Transaction {
   final Category category;
   final double value;
   final CategoryType type;
+  final DateTime createdAt;
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
-        id: json['id'],
-        name: json['name'],
-        date: DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
-        category: Category.fromJson(json['categories']),
-        value: double.tryParse(((json['value'] ?? '0').toString())) ?? 0,
-        type: getCategoryByKey(json['type']));
+      id: json['id'],
+      name: json['name'],
+      date: DateTime.tryParse(json['date'] ?? '') ?? DateTime.now(),
+      category: Category.fromJson(json['categories']),
+      value: double.tryParse(((json['value'] ?? '0').toString())) ?? 0,
+      type: getCategoryByKey(json['type']),
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+    );
   }
 }

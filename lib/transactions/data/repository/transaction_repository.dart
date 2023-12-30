@@ -39,15 +39,21 @@ class TransactionRepositoryImplementation extends TransactionRepository {
           tableName: _tableName,
           selectString: '''*,categories(id,name,icon)''',
           fromJson: Transaction.fromJson,
-          orderFilter: const OrderFilter(
-            ascending: false,
-            columnName: 'date',
-          ),
           inFilter: InFilter(
             columnName: 'id',
             dataToFilter: event.map((e) => (e['id'] as String?) ?? '').toList(),
           ),
           filter: type != null ? {'type': type.name} : null,
+          orderFilter: [
+            const OrderFilter(
+              ascending: false,
+              columnName: 'date',
+            ),
+            const OrderFilter(
+              ascending: false,
+              columnName: 'created_at',
+            )
+          ],
         ),
       );
       return data;
@@ -69,14 +75,20 @@ class TransactionRepositoryImplementation extends TransactionRepository {
           tableName: _tableName,
           selectString: '''*,categories(id,name,icon)''',
           fromJson: Transaction.fromJson,
-          orderFilter: const OrderFilter(
-            ascending: false,
-            columnName: 'date',
-          ),
           inFilter: InFilter(
             columnName: 'id',
             dataToFilter: event.map((e) => (e['id'] as String?) ?? '').toList(),
           ),
+          orderFilter: [
+            const OrderFilter(
+              ascending: false,
+              columnName: 'date',
+            ),
+            const OrderFilter(
+              ascending: false,
+              columnName: 'created_at',
+            )
+          ],
         ),
       );
       return data;

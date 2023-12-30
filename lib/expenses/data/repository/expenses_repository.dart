@@ -58,10 +58,12 @@ class ExpensesRepositoryImplementation extends ExpensesRepository {
           selectString:
               '''*,categories(id,name,icon),payment_methods(id,name,icon)''',
           fromJson: Expense.fromJson,
-          orderFilter: OrderFilter(
-            ascending: false,
-            columnName: 'date',
-          ),
+          orderFilter: [
+            OrderFilter(
+              ascending: false,
+              columnName: 'date',
+            )
+          ],
         ),
       );
       return data;

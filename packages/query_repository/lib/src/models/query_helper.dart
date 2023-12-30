@@ -12,7 +12,8 @@ class QueryHelper<R> {
   final String selectString;
   final Map<String, dynamic>? filter;
   final InFilter? inFilter;
-  final OrderFilter? orderFilter;
+  final List<OrderFilter>? orderFilter;
+
   final R Function(Map<String, dynamic> json) fromJson;
 }
 

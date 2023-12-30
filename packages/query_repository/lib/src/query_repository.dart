@@ -69,8 +69,12 @@ class SupabaseQueryRepository extends QueryRepository {
 
     //Siempre debe ir de ultimo el order
     if (queryHelper.orderFilter != null) {
-      queryOrder = query.order(queryHelper.orderFilter!.columnName,
-          ascending: queryHelper.orderFilter!.ascending);
+      for (var orderData in queryHelper.orderFilter!) {
+        queryOrder = queryOrder.order(
+          orderData.columnName,
+          ascending: orderData.ascending,
+        );
+      }
     }
 
     return queryOrder;
