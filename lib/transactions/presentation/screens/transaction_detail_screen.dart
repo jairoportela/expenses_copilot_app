@@ -54,7 +54,7 @@ class TransactionDetailScreen extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
-              content: Text('Transacción eliminada'),
+              content: Text('Transacción eliminada 🗑️✅'),
             ));
           Navigator.of(context).pop();
         }
