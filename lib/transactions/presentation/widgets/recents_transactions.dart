@@ -4,7 +4,7 @@ import 'package:expenses_copilot_app/transactions/presentation/widgets/transacti
 import 'package:expenses_copilot_app/transactions/providers/transactions_overview/transactions_overview_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 class RecentTransactionListBuilder extends StatelessWidget {
   const RecentTransactionListBuilder({super.key});
@@ -14,7 +14,7 @@ class RecentTransactionListBuilder extends StatelessWidget {
     return BlocProvider(
       create: (_) => TransactionsOverviewBloc(
         repository: TransactionRepositoryImplementation(
-          dataSource: RepositoryProvider.of<QueryRepository>(context),
+          dataSource: RepositoryProvider.of<CrudRepository>(context),
         ),
       )..add(ListenRecentTransactionsEvent()),
       child: const ListTransactionsBuilder(),

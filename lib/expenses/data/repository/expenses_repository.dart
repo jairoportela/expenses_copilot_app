@@ -1,5 +1,5 @@
 import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 abstract class ExpensesRepository {
   Future<bool> create({required String userId, required Expense data});
@@ -13,9 +13,9 @@ abstract class ExpensesRepository {
 }
 
 class ExpensesRepositoryImplementation extends ExpensesRepository {
-  ExpensesRepositoryImplementation({required QueryRepository dataSource})
+  ExpensesRepositoryImplementation({required CrudRepository dataSource})
       : _dataSource = dataSource;
-  final QueryRepository _dataSource;
+  final CrudRepository _dataSource;
 
   static const _tableName = 'expenses';
 

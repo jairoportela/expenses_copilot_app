@@ -8,7 +8,7 @@ import 'package:expenses_copilot_app/utils/date_format.dart';
 import 'package:expenses_copilot_app/utils/number_format.dart';
 
 import 'package:form_inputs/form_inputs.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 part 'create_expense_state.dart';
 

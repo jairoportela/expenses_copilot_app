@@ -2,7 +2,7 @@ import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
 import 'package:expenses_copilot_app/expenses/data/models/expense.dart';
 import 'package:expenses_copilot_app/incomes/data/models/income.dart';
 import 'package:expenses_copilot_app/transactions/data/models/transaction.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 abstract class TransactionRepository {
   Stream<List<Transaction>> getAll(
@@ -14,12 +14,16 @@ abstract class TransactionRepository {
     required CategoryType categoryType,
     required String id,
   });
+  Future<bool> delete({
+    required CategoryType categoryType,
+    required String id,
+  });
 }
 
 class TransactionRepositoryImplementation extends TransactionRepository {
-  TransactionRepositoryImplementation({required QueryRepository dataSource})
+  TransactionRepositoryImplementation({required CrudRepository dataSource})
       : _dataSource = dataSource;
-  final QueryRepository _dataSource;
+  final CrudRepository _dataSource;
 
   static const _tableName = 'transactions';
 
@@ -114,6 +118,21 @@ class TransactionRepositoryImplementation extends TransactionRepository {
             fromJson: Income.fromJson,
             filter: {'id': id},
           ),
+        ),
+    };
+  }
+
+  @override
+  Future<bool> delete(
+      {required CategoryType categoryType, required String id}) async {
+    return await switch (categoryType) {
+      CategoryType.expense => _dataSource.delete(
+          deleteHelper: DeleteHelper(
+              tableName: 'expenses', valueToDelete: id, columnName: 'id'),
+        ),
+      CategoryType.income => _dataSource.delete(
+          deleteHelper: DeleteHelper(
+              tableName: 'incomes', valueToDelete: id, columnName: 'id'),
         ),
     };
   }

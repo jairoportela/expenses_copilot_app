@@ -53,7 +53,9 @@ class CreateIncomeState extends Equatable {
         name: name.value,
         date: date,
         category: Category(id: categoryId.value, name: '', icon: null),
-        value: double.tryParse(value.value) ?? 0,
+        value: double.tryParse(
+                value.value.replaceAll('.', '').replaceAll('.', ',')) ??
+            0,
         createdAt: DateTime.now(),
       );
 

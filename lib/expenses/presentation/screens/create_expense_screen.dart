@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:gap/gap.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 class CreateExpenseArguments {
   const CreateExpenseArguments({
@@ -33,7 +33,7 @@ class CreateExpenseScreen extends StatelessWidget {
       create: (context) => CreateExpenseCubit(
         expense: initialExpense?.toEditExpense,
         repository: ExpensesRepositoryImplementation(
-          dataSource: RepositoryProvider.of<QueryRepository>(context),
+          dataSource: RepositoryProvider.of<CrudRepository>(context),
         ),
         userId: context.read<AppBloc>().state.user.id,
       ),

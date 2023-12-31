@@ -7,7 +7,7 @@ import 'package:expenses_copilot_app/utils/number_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 class MonthlySummaryBuilder extends StatelessWidget {
   const MonthlySummaryBuilder({
@@ -20,7 +20,7 @@ class MonthlySummaryBuilder extends StatelessWidget {
     return BlocProvider(
       create: (context) => MonthlySummaryBloc(
         repository: MonthlySummaryRepositoryImplementation(
-          dataSource: RepositoryProvider.of<QueryRepository>(context),
+          dataSource: RepositoryProvider.of<CrudRepository>(context),
         ),
       )..add(ListenMonthlySummaryEvent(DateTime(now.year, now.month, 1))),
       child: Builder(builder: (context) {

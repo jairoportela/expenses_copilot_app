@@ -6,6 +6,7 @@ import 'package:expenses_copilot_app/incomes/data/models/income.dart';
 import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_screen.dart';
 import 'package:expenses_copilot_app/payment_methods/data/models/payment_method.dart';
 import 'package:expenses_copilot_app/transactions/data/models/transaction.dart';
+import 'package:expenses_copilot_app/transactions/providers/delete_transaction/delete_transaction_cubit.dart';
 import 'package:expenses_copilot_app/transactions/providers/transaction_detail/transaction_detail_cubit.dart';
 import 'package:expenses_copilot_app/utils/date_format.dart';
 import 'package:expenses_copilot_app/utils/number_format.dart';
@@ -47,83 +48,95 @@ class TransactionDetailScreen extends StatelessWidget {
     final color = ElevationOverlay.applySurfaceTint(
         colorScheme.surface, colorScheme.surfaceTint, 1);
     var TransactionDetailArguments(:iconData, :id, :title, :type) = arguments;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalle del movimiento'),
-        centerTitle: true,
-        actions: [
-          BlocSelector<TransactionDetailCubit, TransactionDetailState,
-              Transaction?>(
-            selector: (state) {
-              return state.data;
-            },
-            builder: (context, transaction) {
-              if (transaction != null) {
-                return IconButton(
-                  onPressed: () {
-                    if (type == CategoryType.expense) {
-                      Navigator.of(context)
-                          .pushNamed(
-                        CreateExpenseScreen.routeName,
-                        arguments: CreateExpenseArguments(
-                          toEditExpense: transaction as Expense,
-                        ),
-                      )
-                          .then((value) {
-                        if (value == true) reloadData(context);
-                      });
-                    } else {
-                      Navigator.of(context)
-                          .pushNamed(CreateIncomeScreen.routeName,
-                              arguments: CreateIncomeArguments(
-                                toEditIncome: transaction as Income,
-                              ))
-                          .then((value) {
-                        if (value == true) reloadData(context);
-                      });
-                    }
-                  },
-                  icon: const Icon(Icons.edit),
-                );
-              }
-              return const SizedBox();
-            },
-          )
-        ],
-      ),
-      body: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              BlocSelector<TransactionDetailCubit, TransactionDetailState,
-                  Transaction?>(
-                selector: (state) {
-                  return state.data;
-                },
-                builder: (context, transaction) {
-                  double? value;
-                  if (transaction != null) {
-                    Transaction(:value) = transaction;
-                    if (type == CategoryType.expense) value *= -1;
-                  }
-
-                  return TransactionTitleCard(
-                    color: color,
-                    title: transaction?.name ?? title,
-                    id: id,
-                    iconData: transaction?.category.icon ?? iconData,
-                    value: value,
+    return BlocListener<DeleteTransactionCubit, DeleteTransactionState>(
+      listener: (context, state) {
+        if (state is DeleteTransactionSuccess) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(const SnackBar(
+              content: Text('Transacción eliminada'),
+            ));
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Detalle del movimiento'),
+          centerTitle: true,
+          actions: [
+            BlocSelector<TransactionDetailCubit, TransactionDetailState,
+                Transaction?>(
+              selector: (state) {
+                return state.data;
+              },
+              builder: (context, transaction) {
+                if (transaction != null) {
+                  return IconButton(
+                    onPressed: () {
+                      if (type == CategoryType.expense) {
+                        Navigator.of(context)
+                            .pushNamed(
+                          CreateExpenseScreen.routeName,
+                          arguments: CreateExpenseArguments(
+                            toEditExpense: transaction as Expense,
+                          ),
+                        )
+                            .then((value) {
+                          if (value == true) reloadData(context);
+                        });
+                      } else {
+                        Navigator.of(context)
+                            .pushNamed(CreateIncomeScreen.routeName,
+                                arguments: CreateIncomeArguments(
+                                  toEditIncome: transaction as Income,
+                                ))
+                            .then((value) {
+                          if (value == true) reloadData(context);
+                        });
+                      }
+                    },
+                    icon: const Icon(Icons.edit),
                   );
-                },
-              ),
-              const Gap(5),
-              const TransactionInfoColumn(),
-              const Spacer(),
-              DeleteTransactionButton(type: type)
-            ],
+                }
+                return const SizedBox();
+              },
+            )
+          ],
+        ),
+        body: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                BlocSelector<TransactionDetailCubit, TransactionDetailState,
+                    Transaction?>(
+                  selector: (state) {
+                    return state.data;
+                  },
+                  builder: (context, transaction) {
+                    double? value;
+                    if (transaction != null) {
+                      Transaction(:value) = transaction;
+                      if (type == CategoryType.expense) value *= -1;
+                    }
+
+                    return TransactionTitleCard(
+                      color: color,
+                      title: transaction?.name ?? title,
+                      id: id,
+                      iconData: transaction?.category.icon ?? iconData,
+                      value: value,
+                    );
+                  },
+                ),
+                const Gap(5),
+                const TransactionInfoColumn(),
+                const Spacer(),
+                DeleteTransactionButton(type: type, id: id)
+              ],
+            ),
           ),
         ),
       ),
@@ -135,9 +148,11 @@ class DeleteTransactionButton extends StatelessWidget {
   const DeleteTransactionButton({
     super.key,
     required this.type,
+    required this.id,
   });
 
   final CategoryType type;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -147,14 +162,51 @@ class DeleteTransactionButton extends StatelessWidget {
       },
       builder: (context, isLoaded) {
         return isLoaded
-            ? FilledButton.icon(
-                style: FilledButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(164, 255, 82, 82),
-                    fixedSize: const Size(0, 50),
-                    foregroundColor: Colors.white),
-                onPressed: () {},
-                icon: const Icon(Icons.delete),
-                label: Text('Eliminar ${type.title}'),
+            ? BlocBuilder<DeleteTransactionCubit, DeleteTransactionState>(
+                builder: (context, state) {
+                  return FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(164, 255, 82, 82),
+                        fixedSize: const Size(0, 50),
+                        foregroundColor: Colors.white),
+                    onPressed: state is! DeleteTransactionLoading
+                        ? () {
+                            showDialog(
+                                context: context,
+                                builder: (ctx) {
+                                  return AlertDialog(
+                                    title: const Text(
+                                        '¿Desea eliminar esta transacción?'),
+                                    actions: [
+                                      FilledButton(
+                                        onPressed: () {
+                                          context
+                                              .read<DeleteTransactionCubit>()
+                                              .onDeleteTransaction(id, type);
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Si'),
+                                      ),
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('No'),
+                                      ),
+                                    ],
+                                  );
+                                });
+                          }
+                        : null,
+                    icon: state is DeleteTransactionLoading
+                        ? Transform.scale(
+                            scale: 0.5,
+                            child: const CircularProgressIndicator(),
+                          )
+                        : const Icon(Icons.delete),
+                    label: Text('Eliminar ${type.title}'),
+                  );
+                },
               )
             : const SizedBox();
       },

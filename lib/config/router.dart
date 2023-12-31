@@ -6,10 +6,11 @@ import 'package:expenses_copilot_app/incomes/presentation/screens/create_income_
 import 'package:expenses_copilot_app/transactions/data/repository/transaction_repository.dart';
 import 'package:expenses_copilot_app/transactions/presentation/screens/all_transactions_screen.dart';
 import 'package:expenses_copilot_app/transactions/presentation/screens/transaction_detail_screen.dart';
+import 'package:expenses_copilot_app/transactions/providers/delete_transaction/delete_transaction_cubit.dart';
 import 'package:expenses_copilot_app/transactions/providers/transaction_detail/transaction_detail_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -47,16 +48,27 @@ class RouteGenerator {
       case TransactionDetailScreen.routeName:
         final data = settings.arguments as TransactionDetailArguments;
         return MaterialPageRoute<void>(
-          builder: (context) => BlocProvider(
-            create: (ctx) => TransactionDetailCubit(
-              repository: TransactionRepositoryImplementation(
-                dataSource: RepositoryProvider.of<QueryRepository>(context),
+          builder: (context) {
+            final repository = TransactionRepositoryImplementation(
+              dataSource: RepositoryProvider.of<CrudRepository>(context),
+            );
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (ctx) => TransactionDetailCubit(
+                    repository: repository,
+                  )..getTransaction(data.id, data.type),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      DeleteTransactionCubit(repository: repository),
+                ),
+              ],
+              child: TransactionDetailScreen(
+                arguments: data,
               ),
-            )..getTransaction(data.id, data.type),
-            child: TransactionDetailScreen(
-              arguments: data,
-            ),
-          ),
+            );
+          },
         );
 
       default:

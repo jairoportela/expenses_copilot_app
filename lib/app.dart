@@ -8,17 +8,17 @@ import 'package:expenses_copilot_app/home/presentation/screens/home_screen.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 class ExpensesCopilotApp extends StatelessWidget {
   const ExpensesCopilotApp({
     super.key,
     required AuthenticationRepository authRepository,
-    required QueryRepository queryRepository,
+    required CrudRepository queryRepository,
   })  : _authRepository = authRepository,
         _queryRepository = queryRepository;
   final AuthenticationRepository _authRepository;
-  final QueryRepository _queryRepository;
+  final CrudRepository _queryRepository;
 
   // This widget is the root of your application.
   @override

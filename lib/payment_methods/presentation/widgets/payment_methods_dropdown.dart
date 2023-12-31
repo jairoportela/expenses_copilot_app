@@ -4,7 +4,7 @@ import 'package:expenses_copilot_app/payment_methods/providers/payment_methods_o
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 class PaymentMethodsDropdownBuilder extends StatelessWidget {
   const PaymentMethodsDropdownBuilder({
@@ -21,7 +21,7 @@ class PaymentMethodsDropdownBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => PaymentMethodsOverviewCubit(
-        repository: RepositoryProvider.of<QueryRepository>(context),
+        repository: RepositoryProvider.of<CrudRepository>(context),
       )..getData(),
       child: PaymentMethodsDropdown(
         onChanged: onChanged,

@@ -1,14 +1,14 @@
 import 'package:expenses_copilot_app/categories/data/models/models.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 abstract class CategoryRepository {
   Future<List<Category>> getAll({required CategoryType type});
 }
 
 class CategoryRepositoryImplementation extends CategoryRepository {
-  CategoryRepositoryImplementation({required QueryRepository dataSource})
+  CategoryRepositoryImplementation({required CrudRepository dataSource})
       : _dataSource = dataSource;
-  final QueryRepository _dataSource;
+  final CrudRepository _dataSource;
 
   static const _tableName = 'categories';
 

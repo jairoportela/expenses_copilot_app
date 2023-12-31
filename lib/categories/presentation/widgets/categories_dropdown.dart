@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
 import 'package:gap/gap.dart';
 
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 class CategoriesDropdownBuilder extends StatelessWidget {
   const CategoriesDropdownBuilder({
@@ -28,7 +28,7 @@ class CategoriesDropdownBuilder extends StatelessWidget {
     return BlocProvider(
       create: (_) => CategoriesOverviewCubit(
         repository: CategoryRepositoryImplementation(
-            dataSource: RepositoryProvider.of<QueryRepository>(context)),
+            dataSource: RepositoryProvider.of<CrudRepository>(context)),
       )..getData(type: type),
       child: CategoriesDropdown(
         onChanged: onChanged,

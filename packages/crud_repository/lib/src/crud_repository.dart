@@ -1,23 +1,20 @@
-import 'package:query_repository/src/models/create_helper.dart';
-import 'package:query_repository/src/models/edit_helper.dart';
-import 'package:query_repository/src/models/exceptions.dart';
-import 'package:query_repository/src/models/query_helper.dart';
-import 'package:query_repository/src/models/subscribe_helper.dart';
+import '../src/models/models.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
-abstract class QueryRepository {
+abstract class CrudRepository {
   Future<List<R>> getAll<R>({required QueryHelper<R> queryHelper});
   Future<R> getOne<R>({required QueryHelper<R> queryHelper});
   Future<bool> create({required CreateHelper createHelper});
   Future<bool> edit({required EditHelper editHelper});
+  Future<bool> delete({required DeleteHelper deleteHelper});
   Future<R> createWithValue<R>(
       {required CreateHelperWithValue<R> createHelper});
   supabase.SupabaseStreamFilterBuilder subscribe(
       {required SubscribeHelper subscribeHelper});
 }
 
-class SupabaseQueryRepository extends QueryRepository {
-  SupabaseQueryRepository({
+class SupabaseCrudRepository extends CrudRepository {
+  SupabaseCrudRepository({
     supabase.SupabaseClient? client,
   }) : _client = client ?? supabase.Supabase.instance.client;
 
@@ -134,5 +131,21 @@ class SupabaseQueryRepository extends QueryRepository {
     return _client
         .from(subscribeHelper.tableName)
         .stream(primaryKey: subscribeHelper.primaryKey);
+  }
+
+  @override
+  Future<bool> delete({required DeleteHelper deleteHelper}) async {
+    try {
+      await _client.from(deleteHelper.tableName).delete().eq(
+            deleteHelper.columnName,
+            deleteHelper.valueToDelete,
+          );
+      return true;
+    } on CreateError {
+      rethrow;
+    } catch (error) {
+      throw const CreateError(
+          message: 'Un error ha ocurrido al crear un elemento');
+    }
   }
 }

@@ -1,14 +1,14 @@
 import 'package:expenses_copilot_app/monthly_statistics/data/models/monthly_summary.dart';
-import 'package:query_repository/query_repository.dart';
+import 'package:crud_repository/crud_repository.dart';
 
 abstract class MonthlySummaryRepository {
   Stream<MonthlySummary> getSummary({required DateTime month});
 }
 
 class MonthlySummaryRepositoryImplementation extends MonthlySummaryRepository {
-  MonthlySummaryRepositoryImplementation({required QueryRepository dataSource})
+  MonthlySummaryRepositoryImplementation({required CrudRepository dataSource})
       : _dataSource = dataSource;
-  final QueryRepository _dataSource;
+  final CrudRepository _dataSource;
 
   static const _tableName = 'monthly_statistics';
 
