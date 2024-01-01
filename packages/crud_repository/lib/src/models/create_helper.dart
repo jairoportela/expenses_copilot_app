@@ -9,6 +9,17 @@ class CreateHelper {
   final Map<String, dynamic> data;
 }
 
+class CreateManyHelper {
+  const CreateManyHelper({
+    required this.tableName,
+    required this.data,
+  });
+
+  final String tableName;
+
+  final List<Map<String, dynamic>> data;
+}
+
 class CreateHelperWithValue<R> {
   const CreateHelperWithValue({
     required this.tableName,

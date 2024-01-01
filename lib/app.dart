@@ -1,9 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
 import 'package:expenses_copilot_app/authentication/presentation/screens/login_screen.dart';
+
 import 'package:expenses_copilot_app/config/router.dart';
 import 'package:expenses_copilot_app/config/theme.dart';
 import 'package:expenses_copilot_app/home/presentation/screens/home_screen.dart';
+import 'package:expenses_copilot_app/home/presentation/screens/onboarding_signup_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -74,12 +76,20 @@ class _AppViewState extends State<AppView> {
       builder: (context, child) {
         return BlocListener<AppBloc, AppState>(
           listener: (context, state) {
+            final user = state.user;
             switch (state.status) {
               case AppStatus.authenticated:
-                _navigator.pushNamedAndRemoveUntil<void>(
-                  HomeScreen.routeName,
-                  (route) => false,
-                );
+                if (user.finishOnboarding) {
+                  _navigator.pushNamedAndRemoveUntil<void>(
+                    HomeScreen.routeName,
+                    (route) => false,
+                  );
+                } else {
+                  _navigator.pushNamedAndRemoveUntil<void>(
+                    OnboardingSignUpScreen.routeName,
+                    (route) => false,
+                  );
+                }
               case AppStatus.unauthenticated:
                 _navigator.pushNamedAndRemoveUntil<void>(
                   LoginScreen.routeName,

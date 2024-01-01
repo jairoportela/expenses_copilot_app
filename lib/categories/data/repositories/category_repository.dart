@@ -3,6 +3,10 @@ import 'package:crud_repository/crud_repository.dart';
 
 abstract class CategoryRepository {
   Future<List<Category>> getAll({required CategoryType type});
+  Future<bool> createAll({
+    required List<Category> categories,
+    required String userId,
+  });
 }
 
 class CategoryRepositoryImplementation extends CategoryRepository {
@@ -25,6 +29,19 @@ class CategoryRepositoryImplementation extends CategoryRepository {
           filter: {
             'type': type.name,
           }),
+    );
+    return data;
+  }
+
+  @override
+  Future<bool> createAll(
+      {required List<Category> categories, required String userId}) async {
+    final data = await _dataSource.createMany(
+      createHelper: CreateManyHelper(
+        tableName: _tableName,
+        data:
+            categories.map((e) => {...e.toJson(), 'user_id': userId}).toList(),
+      ),
     );
     return data;
   }

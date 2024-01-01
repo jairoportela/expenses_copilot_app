@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../src/models/models.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 
@@ -5,6 +7,7 @@ abstract class CrudRepository {
   Future<List<R>> getAll<R>({required QueryHelper<R> queryHelper});
   Future<R> getOne<R>({required QueryHelper<R> queryHelper});
   Future<bool> create({required CreateHelper createHelper});
+  Future<bool> createMany({required CreateManyHelper createHelper});
   Future<bool> edit({required EditHelper editHelper});
   Future<bool> delete({required DeleteHelper deleteHelper});
   Future<R> createWithValue<R>(
@@ -146,6 +149,20 @@ class SupabaseCrudRepository extends CrudRepository {
     } catch (error) {
       throw const CreateError(
           message: 'Un error ha ocurrido al crear un elemento');
+    }
+  }
+
+  @override
+  Future<bool> createMany({required CreateManyHelper createHelper}) async {
+    try {
+      await _client.from(createHelper.tableName).insert(createHelper.data);
+      return true;
+    } on CreateError {
+      rethrow;
+    } catch (error) {
+      log(error.toString(), name: 'CreateManyHelper error');
+      throw const CreateError(
+          message: 'Un error ha ocurrido al crear los elementos');
     }
   }
 }

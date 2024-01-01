@@ -183,8 +183,10 @@ class _CreateExpenseDescriptionInputState
           child: CustomTextFormField(
             controller: _controller,
             onChanged: context.read<CreateExpenseCubit>().onChangeName,
-            fieldSettings:
-                const TextFieldSettings(textInputType: TextInputType.text),
+            fieldSettings: const TextFieldSettings(
+              textInputType: TextInputType.text,
+              textCapitalization: TextCapitalization.sentences,
+            ),
             text: value,
           ),
         );

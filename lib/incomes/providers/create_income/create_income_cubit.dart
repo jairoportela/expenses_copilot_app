@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:expenses_copilot_app/categories/data/models/category.dart';
+import 'package:expenses_copilot_app/categories/data/models/category_type.dart';
 import 'package:expenses_copilot_app/incomes/data/models/income.dart';
 import 'package:expenses_copilot_app/incomes/data/repository/income_repository.dart';
 import 'package:expenses_copilot_app/utils/date_format.dart';

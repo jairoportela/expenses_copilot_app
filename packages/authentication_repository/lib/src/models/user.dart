@@ -9,6 +9,7 @@ class User extends Equatable {
   /// {@macro user}
   const User({
     required this.id,
+    required this.finishOnboarding,
     this.email,
     this.profileImage,
     this.name,
@@ -26,8 +27,10 @@ class User extends Equatable {
   /// The current user's id.
   final String id;
 
+  final bool finishOnboarding;
+
   /// Empty user which represents an unauthenticated user.
-  static const empty = User(id: '');
+  static const empty = User(id: '', finishOnboarding: false);
 
   /// Convenience getter to determine whether the current user is empty.
   bool get isEmpty => this == User.empty;
@@ -36,5 +39,5 @@ class User extends Equatable {
   bool get isNotEmpty => this != User.empty;
 
   @override
-  List<Object?> get props => [email, id, profileImage, name];
+  List<Object?> get props => [email, id, profileImage, name, finishOnboarding];
 }

@@ -56,7 +56,11 @@ class CreateExpenseState extends Equatable {
         id: id ?? '',
         name: name.value,
         date: date,
-        category: Category(id: categoryId.value, name: '', icon: null),
+        category: Category(
+            id: categoryId.value,
+            name: '',
+            icon: null,
+            type: CategoryType.expense),
         value: double.tryParse(
                 value.value.replaceAll('.', '').replaceAll('.', ',')) ??
             0,

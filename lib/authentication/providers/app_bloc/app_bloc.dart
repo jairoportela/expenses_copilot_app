@@ -21,7 +21,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Future<void> _onUserChanged(
       AppUserChanged event, Emitter<AppState> emit) async {
-    await emit.forEach(_authenticationRepository.user, onData: (user) {
+    await emit.forEach(_authenticationRepository.getUser(), onData: (user) {
       if (user.id.isEmpty) {
         return const AppState.unauthenticated();
       } else {

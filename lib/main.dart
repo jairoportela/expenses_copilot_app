@@ -19,7 +19,7 @@ void main() async {
       SupabaseAuthenticationRepository(client: supabaseInstance.client);
   final CrudRepository queryRepository =
       SupabaseCrudRepository(client: supabaseInstance.client);
-  await authRepository.user.first;
+  await authRepository.getUser().first;
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
