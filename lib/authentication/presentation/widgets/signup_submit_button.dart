@@ -16,7 +16,7 @@ class SingUpSubmitButton extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
               content: Text(
-                'Creación de cuenta exitosa.',
+                'Creación de cuenta exitosa ✅.',
               ),
             ));
         }

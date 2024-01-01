@@ -11,49 +11,79 @@ import 'package:gap/gap.dart';
 
 List<CategorySelectableItem> expensesCategories = [
   const CategorySelectableItem(
-    '1',
+    'restaurant_menu_rounded',
     'Alimentación',
     Icons.restaurant_menu_rounded,
   ),
   const CategorySelectableItem(
-    '2',
+    'airport_shuttle_rounded',
     'Transporte',
     Icons.airport_shuttle_rounded,
   ),
   const CategorySelectableItem(
-    '3',
+    'home_rounded',
     'Vivienda',
-    Icons.home,
+    Icons.home_rounded,
   ),
   const CategorySelectableItem(
-    '4',
+    'movie_creation_rounded',
     'Entretenimiento',
     Icons.movie_creation_rounded,
   ),
   const CategorySelectableItem(
-    '5',
+    'health_and_safety_rounded',
     'Salud',
-    Icons.health_and_safety,
+    Icons.health_and_safety_rounded,
   ),
   const CategorySelectableItem(
-    '6',
+    'school_rounded',
     'Educación',
-    Icons.school,
+    Icons.school_rounded,
   ),
   const CategorySelectableItem(
-    '7',
+    'payments_rounded',
     'Deudas',
     Icons.payments_rounded,
   ),
   const CategorySelectableItem(
-    '8',
+    'account_balance_rounded',
     'Impuestos',
     Icons.account_balance_rounded,
   ),
   const CategorySelectableItem(
-    '9',
+    'work_rounded',
     'Trabajo',
-    Icons.work,
+    Icons.work_rounded,
+  ),
+  const CategorySelectableItem(
+    'sports_soccer_rounded',
+    'Deporte',
+    Icons.sports_soccer_rounded,
+  ),
+  const CategorySelectableItem(
+    'shopping_cart_rounded',
+    'Compras',
+    Icons.shopping_cart_rounded,
+  ),
+  const CategorySelectableItem(
+    'flight_rounded',
+    'Viajes',
+    Icons.flight_rounded,
+  ),
+  const CategorySelectableItem(
+    'pets_rounded',
+    'Mascota',
+    Icons.pets_rounded,
+  ),
+  const CategorySelectableItem(
+    'subscriptions_outlined',
+    'Subscripción',
+    Icons.subscriptions_outlined,
+  ),
+  const CategorySelectableItem(
+    'redeem_rounded',
+    'Regalo',
+    Icons.redeem_rounded,
   ),
 ];
 List<CategorySelectableItem> incomesCategories = [

@@ -16,7 +16,7 @@ class SingInSubmitButton extends StatelessWidget {
             ..hideCurrentSnackBar()
             ..showSnackBar(const SnackBar(
               content: Text(
-                'Inicio de sesión exitoso.',
+                'Inicio de sesión exitoso ✅.',
               ),
             ));
         }

@@ -122,6 +122,7 @@ class _SignUpFormState extends State<SignUpForm> {
                     textInputAction: TextInputAction.next,
                     autoFillHints: [AutofillHints.name],
                     textInputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
                   ),
                 ),
               );
