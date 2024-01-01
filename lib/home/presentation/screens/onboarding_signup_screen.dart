@@ -51,11 +51,6 @@ List<CategorySelectableItem> expensesCategories = [
     Icons.account_balance_rounded,
   ),
   const CategorySelectableItem(
-    'work_rounded',
-    'Trabajo',
-    Icons.work_rounded,
-  ),
-  const CategorySelectableItem(
     'sports_soccer_rounded',
     'Deporte',
     Icons.sports_soccer_rounded,
@@ -85,22 +80,72 @@ List<CategorySelectableItem> expensesCategories = [
     'Regalo',
     Icons.redeem_rounded,
   ),
+  const CategorySelectableItem(
+    'electrical_services_rounded',
+    'Servicios',
+    Icons.electrical_services_rounded,
+  ),
+  const CategorySelectableItem(
+    'directions_car_rounded',
+    'Automovíl',
+    Icons.directions_car_rounded,
+  ),
+  const CategorySelectableItem(
+    'add',
+    'Otros',
+    Icons.add,
+  ),
 ];
 List<CategorySelectableItem> incomesCategories = [
   const CategorySelectableItem(
-    '1',
+    'monetization_on_rounded',
     'Salario',
-    Icons.monetization_on,
+    Icons.monetization_on_rounded,
   ),
   const CategorySelectableItem(
-    '2',
-    'Prestamos',
-    Icons.car_crash,
+    'add_card_rounded',
+    'Ingresos extra',
+    Icons.add_card_rounded,
   ),
   const CategorySelectableItem(
-    '3',
+    'domain_add_outlined',
+    'Trabajo independiente',
+    Icons.domain_add_outlined,
+  ),
+  const CategorySelectableItem(
+    'bar_chart_rounded',
     'Inversiones',
-    Icons.inventory,
+    Icons.bar_chart_rounded,
+  ),
+  const CategorySelectableItem(
+    'house_rounded',
+    'Arriendos',
+    Icons.house_rounded,
+  ),
+  const CategorySelectableItem(
+    'sell_rounded',
+    'Ventas',
+    Icons.sell_rounded,
+  ),
+  const CategorySelectableItem(
+    'diversity_3_rounded',
+    'Ayudas familiares',
+    Icons.diversity_3_rounded,
+  ),
+  const CategorySelectableItem(
+    'redeem_rounded',
+    'Regalos',
+    Icons.redeem_rounded,
+  ),
+  const CategorySelectableItem(
+    'attach_money_rounded',
+    'Prestamos',
+    Icons.attach_money_rounded,
+  ),
+  const CategorySelectableItem(
+    'add',
+    'Otros',
+    Icons.add,
   ),
 ];
 
