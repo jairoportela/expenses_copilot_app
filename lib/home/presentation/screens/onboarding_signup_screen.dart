@@ -4,6 +4,7 @@ import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.
 import 'package:expenses_copilot_app/categories/data/repositories/category_repository.dart';
 import 'package:expenses_copilot_app/common/widgets/app_bottom_bar.dart';
 import 'package:expenses_copilot_app/home/providers/cubit/sign_up_onboarding_cubit.dart';
+import 'package:expenses_copilot_app/payment_methods/data/repositories/payment_method_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';
@@ -155,12 +156,18 @@ class OnboardingSignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dataSource = RepositoryProvider.of<CrudRepository>(context);
+    final authenticationRepository =
+        RepositoryProvider.of<AuthenticationRepository>(context);
+
     return BlocProvider(
         create: (context) => SignUpOnboardingCubit(
-            authenticationRepository:
-                RepositoryProvider.of<AuthenticationRepository>(context),
-            repository: CategoryRepositoryImplementation(
-              dataSource: RepositoryProvider.of<CrudRepository>(context),
+            authenticationRepository: authenticationRepository,
+            categoryRepository: CategoryRepositoryImplementation(
+              dataSource: dataSource,
+            ),
+            paymentMethodRepository: PaymentMethodRepositoryImplementation(
+              dataSource: dataSource,
             )),
         child: const Scaffold(
           body: SafeArea(

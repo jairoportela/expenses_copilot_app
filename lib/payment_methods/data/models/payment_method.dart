@@ -12,4 +12,12 @@ class PaymentMethod {
       icon: json['icon'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {'name': name};
+    if (icon != null) {
+      data['icon'] = icon!;
+    }
+    return data;
+  }
 }
