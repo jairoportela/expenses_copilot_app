@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:expenses_copilot_app/categories/data/models/models.dart';
@@ -8,8 +9,11 @@ import 'package:form_inputs/form_inputs.dart';
 part 'sign_up_onboarding_state.dart';
 
 class SignUpOnboardingCubit extends Cubit<SignUpOnboardingState> {
-  SignUpOnboardingCubit({required CategoryRepository repository})
-      : _repository = repository,
+  SignUpOnboardingCubit({
+    required CategoryRepository repository,
+    required AuthenticationRepository authenticationRepository,
+  })  : _repository = repository,
+        _authRepository = authenticationRepository,
         super(SignUpOnboardingState.empty);
 
   void onExpenseCategoryChange(String id, CategorySelectableItem category) {
@@ -95,6 +99,9 @@ class SignUpOnboardingCubit extends Cubit<SignUpOnboardingState> {
           ),
         )
       ], userId: userId);
+      await _authRepository.updateMetadataUser(data: {
+        'finish_onboarding': true,
+      });
       emit(state.copyWith(status: const FormSubmitSuccess()));
     } catch (error) {
       emit(state.copyWith(status: FormSubmitError(error.toString())));
@@ -102,4 +109,5 @@ class SignUpOnboardingCubit extends Cubit<SignUpOnboardingState> {
   }
 
   final CategoryRepository _repository;
+  final AuthenticationRepository _authRepository;
 }

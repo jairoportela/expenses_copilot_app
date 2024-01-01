@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:authentication_repository/src/models/models.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
@@ -16,6 +18,9 @@ abstract class AuthenticationRepository {
     required String email,
     required String password,
     required String username,
+  });
+  Future<bool> updateMetadataUser({
+    required Map<String, dynamic> data,
   });
 
   Future<void> signOut();
@@ -37,6 +42,7 @@ class SupabaseAuthenticationRepository extends AuthenticationRepository {
   void _init() {
     _userStreamController
         .addStream(_supabase.auth.onAuthStateChange.asyncMap((data) async {
+      log(data.event.toString(), name: 'onAuthStateChange');
       final supabase.User? user = data.session?.user;
       if (user == null) {
         return User.empty;
@@ -100,6 +106,21 @@ class SupabaseAuthenticationRepository extends AuthenticationRepository {
     try {
       await _supabase.auth.signOut();
     } catch (_) {}
+  }
+
+  @override
+  Future<bool> updateMetadataUser({required Map<String, dynamic> data}) async {
+    try {
+      final response = await _supabase.auth.updateUser(supabase.UserAttributes(
+        data: data,
+      ));
+      if (response.user != null) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
   }
 }
 

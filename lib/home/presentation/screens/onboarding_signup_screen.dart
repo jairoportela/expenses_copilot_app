@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:crud_repository/crud_repository.dart';
 import 'package:expenses_copilot_app/authentication/providers/app_bloc/app_bloc.dart';
 import 'package:expenses_copilot_app/categories/data/repositories/category_repository.dart';
@@ -81,7 +82,9 @@ class OnboardingSignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (context) => SignUpOnboardingCubit(
-                repository: CategoryRepositoryImplementation(
+            authenticationRepository:
+                RepositoryProvider.of<AuthenticationRepository>(context),
+            repository: CategoryRepositoryImplementation(
               dataSource: RepositoryProvider.of<CrudRepository>(context),
             )),
         child: const Scaffold(
