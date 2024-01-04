@@ -21,10 +21,14 @@ class MonthlySummary {
         double.tryParse((json['total_expenses'] ?? '').toString()) ?? 0.0;
     final totalIncomes =
         double.tryParse((json['total_incomes'] ?? '').toString()) ?? 0.0;
+    final totalBalance =
+        double.tryParse((json['total_balance'] ?? '').toString()) ?? 0.0;
 
     final totalSum = totalIncomes.abs() + totalExpenses.abs();
-    final incomesPercentage = totalIncomes.abs() / totalSum;
-    final expensesPercentage = totalExpenses.abs() / totalSum;
+    final incomesPercentage =
+        totalSum == 0 ? 0.0 : totalIncomes.abs() / totalSum;
+    final expensesPercentage =
+        totalSum == 0 ? 0.0 : totalExpenses.abs() / totalSum;
 
     return MonthlySummary(
       id: json['id'],
@@ -33,7 +37,7 @@ class MonthlySummary {
       totalIncomes: totalIncomes,
       expensesPercentage: expensesPercentage,
       incomesPercentage: incomesPercentage,
-      balance: totalIncomes + totalExpenses,
+      balance: totalBalance,
     );
   }
 
